@@ -14,7 +14,7 @@
 
 namespace Fauxon{
     void Main(CommonParem_cl& Args){
-        Fauxon::NeuralNetwork::TextNeuralNetwork_cl TextNeuralNetwork({10,9,8,7,6,5,6,7,8,9,10});
+        Fauxon::NeuralNetwork::TextNeuralNetwork_cl TextNeuralNetwork(100);
         TextNeuralNetwork.Import();
         TextNeuralNetwork.Input("I love pizza");
         TextNeuralNetwork.Input("I love cats");
