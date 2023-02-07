@@ -35,16 +35,13 @@ namespace Fauxon{
             iFile>>DataToExport;
             iFile.close();
             DataToExport["numberOfParemeters"] = numberOfParemeters;
-            for(int iPosition=0;iPosition<SentenceData.size();iPosition++){
-                for(int iWord=0;iWord<SentenceData[iPosition].size();iWord++){
-                    DataToExport["SentenceData"][iPosition][iWord] = SentenceData[iPosition][iWord];
-                }
+            //write data to export
+            for(int a=0;a<SentenceData.size();a++){
+                DataToExport["SentenceData"][a] = SentenceData[a];
             }
             for(int a=0;a<ParemData.size();a++){
                 for(int b=0;b<ParemData[a].size();b++){
-                    for(int c=0;c<ParemData[a][b].size();c++){
-                        DataToExport["ParemData"][a][b][c] = ParemData[a][b][c];
-                    }
+                    DataToExport["ParemData"][a][b] = ParemData[a][b];
                 }
             }
             std::ofstream oFile(FileName.c_str());
@@ -63,24 +60,45 @@ namespace Fauxon{
             numberOfParemeters = DataToImport["numberOfParemeters"].asUInt();
             SentenceData.clear();
             SentenceData.resize(DataToImport["SentenceData"].size());
-            for(int iPosition=0;iPosition<DataToImport["SentenceData"].size();iPosition++){
-                SentenceData[iPosition].resize(DataToImport["SentenceData"][iPosition].size());
-                for(int iWord=0;iWord<DataToImport["SentenceData"][iPosition].size();iWord++){
-                    SentenceData[iPosition][iWord] = DataToImport["SentenceData"][iPosition][iWord].asString();
-                }
+            for(int a=0;a<DataToImport["SentenceData"].size();a++){
+                SentenceData[a] = DataToImport["SentenceData"][a].asString();
             }
             ParemData.clear();
             ParemData.resize(DataToImport["ParemData"].size());
             for(int a=0;a<DataToImport["ParemData"].size();a++){
-                ParemData[a].resize(DataToImport["ParemData"][a].size());
+                DataToImport["ParemData"][a].resize(DataToImport["ParemData"][a].size());
                 for(int b=0;b<DataToImport["ParemData"][a].size();b++){
-                    ParemData[a][b].resize(DataToImport["ParemData"][a][b].size());
-                    for(int c=0;c<DataToImport["ParemData"][a][b].size();c++){
-                        ParemData[a][b][c] = DataToImport["ParemData"][a][b][c].asDouble();
-                    }
+                    ParemData[a][b] = DataToImport["ParemData"][a][b].asDouble();
                 }
             }
-            return "";
+            return fastWriter.write(DataToImport);
+        }
+        std::deque<double> TextNeuralNetwork_cl::WordToVector(std::string Word){
+            std::deque<double> Result;
+            for(uint32_t i=0;i<SentenceData.size();i++){
+                if(SentenceData[i] == Word){Result=ParemData[i];break;}
+            }
+            return Result;
+        }
+        std::string TextNeuralNetwork_cl::VectorToWord(std::deque<double> Vector){
+            assert(Vector.size() == numberOfParemeters);
+            std::string Result="";
+            uint32_t CurrentIndex=0;
+            double CurrentSimilarity=0.0;
+            for(uint32_t a=1;a<=ParemData.size();a++){
+                std::deque<double> aVector = ParemData[a-1];
+                double Similarity=0.0;
+                for(uint32_t b=0;b<aVector.size();b++){
+                    if(aVector[b] == Vector[b]){Similarity+=0.00000000001;}else{Similarity-=0.00000000001;}
+                }
+                if(Similarity > CurrentSimilarity){
+                    CurrentSimilarity=Similarity;
+                    CurrentIndex=a;
+                }
+            }
+            if(!CurrentIndex)return "";
+            Result=SentenceData[CurrentIndex-1];
+            return Result;
         }
         void TextNeuralNetwork_cl::Input(std::string Sentence){
             std::deque<std::string> Words;
@@ -88,40 +106,23 @@ namespace Fauxon{
             std::istringstream f(Sentence);
             while (std::getline(f, s, ' ')) {
                 if(s[s.size()-1] == '\n')s[s.size()-1]=0;
-                Words.push_back(s);
-            }
-            Words.push_back(ENDER);
-            for(size_t iPosition=0;iPosition<Words.size();iPosition++){
-                if(iPosition >= SentenceData.size()){
-                    SentenceData.push_back({Words[iPosition]});
-                    ParemData.resize(Sentence.size());
-                    ParemData[iPosition].resize(SentenceData.back().size());
-                    for(uint32_t Parem=0;Parem<numberOfParemeters;Parem++){
-                        ParemData[iPosition].back().push_back(Function_Random(1.0));
-                    }
-                }else{
-                    bool New=true;
-                    for(size_t iWord=0;iWord<SentenceData[iPosition].size();iWord++){
-                        if(SentenceData[iPosition][iWord] == Words[iPosition])New=false;
-                    }
-                    if(New){
-                        SentenceData[iPosition].push_back(Words[iPosition]);
-                        ParemData[iPosition].resize(SentenceData[iPosition].size());
-                        for(uint32_t Parem=0;Parem<numberOfParemeters;Parem++){
-                            ParemData[iPosition].back().push_back(Function_Random(1.0));
-                        }
+                bool New=true;
+                for(size_t iWord=0;iWord<SentenceData.size();iWord++){
+                    if(SentenceData[iWord] == s)New=false;
+                }
+                if(New){
+                    SentenceData.push_back(s);
+                    ParemData.resize(SentenceData.size());
+                    ParemData[SentenceData.size()-1].resize(numberOfParemeters);
+                    for(size_t iParem=0;iParem<numberOfParemeters;iParem++){
+                        ParemData[SentenceData.size()-1][iParem] = Function_Random(0.0);
                     }
                 }
             }
         }
         std::string TextNeuralNetwork_cl::Output(){
             std::string Result="";
-            for(size_t iPosition=0;iPosition<SentenceData.size();iPosition++){
-                size_t WordIndex = rand()%SentenceData[iPosition].size();
-                std::string subResult=SentenceData[iPosition][WordIndex];
-                if(subResult == ENDER)break;
-                Result+=subResult+std::string(" ");
-            }
+            
             return Result;
         }
     };

@@ -21,6 +21,10 @@ namespace Fauxon{
         TextNeuralNetwork.Input("I love cars");
         TextNeuralNetwork.Input("I hate politicians");
         TextNeuralNetwork.Input("Pizza is too expensive");
+
+        std::deque<double> v = TextNeuralNetwork.WordToVector("hate");
+        std::cout<<"?"<<TextNeuralNetwork.VectorToWord(v)<<std::endl;
+
         TextNeuralNetwork.Export();
     }
 };
