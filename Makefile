@@ -3,8 +3,7 @@ PROJECT_NAME = Fauxon
 CC := g++
 LD := $(CC)
 
-INCDIR=header
-CFLAGS = -I$(INCDIR) -Werror -fshort-wchar -mno-red-zone -fmax-errors=1
+ARGDIR=args
 LDFLAGS = -static -Bsymbolic
 
 SRCDIR := source
@@ -18,12 +17,12 @@ SRC = $(call rwildcard,$(SRCDIR),*.cpp)
 OBJS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%_cpp.o, $(SRC))
 DIRS = $(wildcard $(SRCDIR)/*)
 
-$(OBJDIR)/%_cpp.o:$(SRCDIR)/%.cpp
+$(OBJDIR)/%_cpp.o:$(SRCDIR)/%.cpp $(ARGDIR)/%.arg
 	mkdir -p $(@D)
-	${CC} $(CFLAGS) -o $@ -c $^
+	${CC} -o $@ -c $< ${shell cat $(ARGDIR)/$(*).arg}
 
 $(BUILDDIR)/$(PROJECT_NAME).exe: $(OBJS)
-	${LD} $(LDFLAGS) -o $@ $^
+	${LD} $(LDFLAGS) -o $@ $^ -ljsoncpp
 
 
 .PHONY: compile clean run test push
@@ -34,10 +33,7 @@ clean:
 	rm -frv $(BUILDDIR)/*
 
 run: compile
-	time(./$(BUILDDIR)/$(PROJECT_NAME).exe $(TESTFILE))
-
-test: tests/Test.sh
-	./$<
+	./$(BUILDDIR)/$(PROJECT_NAME).exe
 
 push: compile clean
 	git add .

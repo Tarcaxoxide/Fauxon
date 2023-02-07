@@ -1,9 +1,26 @@
+#include<deque>
+#include<string>
 #include<iostream>
+#include<cstdlib>
+#include<cpp_wrapper/CommonParem.hpp>
+#include<NeuralNetwork/TextNeuralNetwork.hpp>
+#include<iomanip>
 
-int main(int argc,char** argv){
-    std::cout<<"Args:{"<<std::endl;
-    for(size_t i=0;i<argc;i++){
-        std::cout<<"\t["<<i<<"]:"<<argv[i]<<(i<argc-1?",":"")<<std::endl;
+
+
+// "I love pizza" -> [["I"],["love"],["pizza"]]
+// "I hate pizza" -> [["I"],["love","hate"],["pizza"]]
+// "I love cats" ->  [["I"],["love","hate"],["pizza","cats"]]
+
+namespace Fauxon{
+    void Main(CommonParem_cl& Args){
+        Fauxon::NeuralNetwork::TextNeuralNetwork_cl TextNeuralNetwork({10,9,8,7,6,5,6,7,8,9,10});
+        TextNeuralNetwork.Import();
+        TextNeuralNetwork.Input("I love pizza");
+        TextNeuralNetwork.Input("I love cats");
+        TextNeuralNetwork.Input("I love cars");
+        TextNeuralNetwork.Input("I hate politicians");
+        TextNeuralNetwork.Input("Pizza is too expensive");
+        TextNeuralNetwork.Export();
     }
-    std::cout<<"};"<<std::endl;
-}
+};
