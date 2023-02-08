@@ -15,7 +15,7 @@
 
 namespace Fauxon{
     void Main(CommonParem_cl& Args){
-        Fauxon::NeuralNetwork::TextNeuralNetwork_cl TextNeuralNetwork(100);
+        Fauxon::NeuralNetwork::TextNeuralNetwork_cl TextNeuralNetwork(10);
         TextNeuralNetwork.Import();
         
         std::deque<std::string> TrainingData;

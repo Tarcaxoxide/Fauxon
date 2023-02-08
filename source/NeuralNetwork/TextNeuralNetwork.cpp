@@ -13,9 +13,7 @@ inline double Function_Random(const double& Vin){
 std::deque<uint32_t> TopGen(uint32_t numberOfParemeters){
     std::deque<uint32_t> Topology;
     Topology.push_back(numberOfParemeters);
-    for(size_t i=0;i<4;i++){
-        Topology.push_back(rand()%numberOfParemeters);
-    }
+    Topology.push_back(numberOfParemeters);
     Topology.push_back(numberOfParemeters);
     return Topology;
 }
