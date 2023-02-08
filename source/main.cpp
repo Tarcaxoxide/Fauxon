@@ -5,6 +5,7 @@
 #include<cpp_wrapper/CommonParem.hpp>
 #include<NeuralNetwork/TextNeuralNetwork.hpp>
 #include<iomanip>
+#include<fstream>
 
 
 
@@ -16,15 +17,21 @@ namespace Fauxon{
     void Main(CommonParem_cl& Args){
         Fauxon::NeuralNetwork::TextNeuralNetwork_cl TextNeuralNetwork(100);
         TextNeuralNetwork.Import();
-        TextNeuralNetwork.Input("I love pizza");
-        TextNeuralNetwork.Input("I love cats");
-        TextNeuralNetwork.Input("I love cars");
-        TextNeuralNetwork.Input("I hate politicians");
-        TextNeuralNetwork.Input("Pizza is too expensive");
-
-        std::deque<double> v = TextNeuralNetwork.WordToVector("hate");
-        std::cout<<"?"<<TextNeuralNetwork.VectorToWord(v)<<std::endl;
-
+        
+        std::deque<std::string> TrainingData;
+        std::ifstream File("Sentences.txt");
+        std::string Line="";
+        while(std::getline(File,Line)){
+            std::cout<<"?0:"<<Line<<std::endl;
+            TrainingData.push_back(Line);
+        }
+        File.close();
+        TextNeuralNetwork.Train(TrainingData,9000);
         TextNeuralNetwork.Export();
+
+        std::string word="";
+        while(std::getline(std::cin,Line,' ')){
+            if(word.size()){word = TextNeuralNetwork.GetNextWord(word,Line);}else{word=Line;}
+        }
     }
 };

@@ -4,6 +4,7 @@
 #include<json/json.h>
 #include<json/writer.h>
 #include<json/reader.h>
+#include <iostream>
 
 inline double Function_Random(const double& Vin){
     return (double)rand() / (double)RAND_MAX;
@@ -11,15 +12,22 @@ inline double Function_Random(const double& Vin){
 
 std::deque<uint32_t> TopGen(uint32_t numberOfParemeters){
     std::deque<uint32_t> Topology;
-    uint32_t Min=numberOfParemeters/2;
-    size_t i=numberOfParemeters;
-    for(;i>=Min;i--){
-        Topology.push_back(i);
+    Topology.push_back(numberOfParemeters);
+    for(size_t i=0;i<4;i++){
+        Topology.push_back(rand()%numberOfParemeters);
     }
-    for(;i<=numberOfParemeters;i++){
-        Topology.push_back(i);
-    }
+    Topology.push_back(numberOfParemeters);
     return Topology;
+}
+
+// 'WordA' + 'WordB' ~= 'WordC'
+// I love pizza
+// 'WordA'="I" 'WordB'="love" 'WordC'="pizza"
+
+bool Similar(double A,double B,double offset){
+    if( (B-offset) < A && A < (B+offset) )return true;
+    // [B-offset] < [A] < [B+offset]
+    return false;
 }
 
 namespace Fauxon{
@@ -52,7 +60,8 @@ namespace Fauxon{
         std::string TextNeuralNetwork_cl::Import(std::string FileName){
             Json::FastWriter fastWriter;
             Json::Value DataToImport;
-            SimpleNeuralNetwork.Import(FileName);
+            std::string a = SimpleNeuralNetwork.Import(FileName);
+            if(!a.size())return "";
             std::ifstream File(FileName.c_str());
             if(!File.good())return "";
             File>>DataToImport;
@@ -66,9 +75,10 @@ namespace Fauxon{
             ParemData.clear();
             ParemData.resize(DataToImport["ParemData"].size());
             for(int a=0;a<DataToImport["ParemData"].size();a++){
-                DataToImport["ParemData"][a].resize(DataToImport["ParemData"][a].size());
+                ParemData[a].resize(DataToImport["ParemData"][a].size());
                 for(int b=0;b<DataToImport["ParemData"][a].size();b++){
                     ParemData[a][b] = DataToImport["ParemData"][a][b].asDouble();
+                    
                 }
             }
             return fastWriter.write(DataToImport);
@@ -85,22 +95,27 @@ namespace Fauxon{
             std::string Result="";
             uint32_t CurrentIndex=0;
             double CurrentSimilarity=0.0;
+            static double OffSet=0.0000000000000001;
+            TryAgain:
             for(uint32_t a=1;a<=ParemData.size();a++){
                 std::deque<double> aVector = ParemData[a-1];
                 double Similarity=0.0;
                 for(uint32_t b=0;b<aVector.size();b++){
-                    if(aVector[b] == Vector[b]){Similarity+=0.00000000001;}else{Similarity-=0.00000000001;}
+                    if(Similar(aVector[b],Vector[b],OffSet)){Similarity+=0.00000000001;}else{Similarity-=0.00000000001;}
                 }
                 if(Similarity > CurrentSimilarity){
                     CurrentSimilarity=Similarity;
                     CurrentIndex=a;
                 }
             }
-            if(!CurrentIndex)return "";
+            if(CurrentIndex == 0){
+                OffSet*=10;
+                goto TryAgain;
+            }
             Result=SentenceData[CurrentIndex-1];
             return Result;
         }
-        void TextNeuralNetwork_cl::Input(std::string Sentence){
+        void TextNeuralNetwork_cl::Add(std::string Sentence){
             std::deque<std::string> Words;
             std::string s;
             std::istringstream f(Sentence);
@@ -120,10 +135,42 @@ namespace Fauxon{
                 }
             }
         }
-        std::string TextNeuralNetwork_cl::Output(){
-            std::string Result="";
-            
-            return Result;
+        void TextNeuralNetwork_cl::Train(std::deque<std::string> Examples,size_t Epoch){
+            for(size_t i=0;i<Examples.size();i++)Add(Examples[i]);//make sure all the words exist.
+            for(size_t i=0;i<Epoch;i++){
+                std::cout<<"Training:"<<i<<"/"<<Epoch<<std::endl;
+                std::cout<<"?1"<<std::endl;
+                size_t index=rand()%Examples.size();
+                std::string ThisSentence=Examples[index];
+                std::deque<std::string> Words;
+                Words.clear();
+                std::istringstream f(ThisSentence);
+                std::string s="";
+                while (std::getline(f, s, ' ')){
+                    Words.push_back(s);
+                }
+                // 0 1 2
+                for(size_t pos=2;pos<Words.size();pos++){
+                    std::deque<double> WordVectorC=WordToVector(Words[pos]);
+                    std::deque<double> WordVectorB=WordToVector(Words[pos-1]);
+                    std::deque<double> WordVectorA=WordToVector(Words[pos-2]);
+                    std::deque<double> InputVector=WordVectorA;
+                    std::deque<double> ExpectedVector=WordVectorC;
+                    InputVector.insert(InputVector.end(),WordVectorB.begin(),WordVectorB.end());
+                    SimpleNeuralNetwork.FeedForward(InputVector);
+                    SimpleNeuralNetwork.BackPropagate(ExpectedVector);
+                }
+            }
+            std::cout<<"Training:"<<Epoch<<"/"<<Epoch<<std::endl;
+        }
+        std::string TextNeuralNetwork_cl::GetNextWord(std::string WordA,std::string WordB){
+            std::deque<double> WordVectorB=WordToVector(WordB);
+            std::deque<double> WordVectorA=WordToVector(WordA);
+            std::deque<double> InputVector=WordVectorA;
+            InputVector.insert(InputVector.end(),WordVectorB.begin(),WordVectorB.end());
+            SimpleNeuralNetwork.FeedForward(InputVector);
+            std::deque<double> Res=SimpleNeuralNetwork.getPrediction();
+            return VectorToWord(Res);
         }
     };
 };

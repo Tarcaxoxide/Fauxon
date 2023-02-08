@@ -16,8 +16,9 @@ namespace Fauxon{
             std::string Import(std::string FileName="Save.json");
             std::deque<double> WordToVector(std::string Word);
             std::string VectorToWord(std::deque<double> Vector);
-            void Input(std::string Sentence);
-            std::string Output();
+            void Add(std::string Sentence);
+            void Train(std::deque<std::string> Examples,size_t Epoch);
+            std::string GetNextWord(std::string WordA,std::string WordB);
         };
     };
 };
