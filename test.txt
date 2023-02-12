@@ -1,0 +1,14 @@
+ENV_NEW test
+ENV_JUMP test
+TIME apple
+{
+    100:x,
+    32:y,
+    apple:appl,
+    {
+        1:bar
+    }:complex
+} = OBJ
+ENV_RETURN 0
+PRINT test::apple
+ENV_DELETE test
