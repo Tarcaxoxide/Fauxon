@@ -9,7 +9,6 @@ export async function run(filename:string) {
     const srcCode = await Deno.readTextFile(filename)
     const program = parser.produceAST(srcCode);
     const results = evaluate(program);
-    console.log(results);
 }
 
 
@@ -20,6 +19,5 @@ export async function repl() {
         if(!input || input.includes("exit")){Deno.exit(0);}
         const program = parser.produceAST(input);
 		const results = evaluate(program);
-		console.log(results);
 	}
 }
