@@ -1,4 +1,4 @@
-import { MAKE_BOOL, MAKE_NULL, RunTimeValue } from "./values.ts"
+import { MAKE_BOOL, MAKE_NATIVE_FUNCTION, MAKE_NULL, RunTimeValue } from "./values.ts"
 
 
 export default class Enviroment{
@@ -14,6 +14,11 @@ export default class Enviroment{
 		this.SetVariable("TRUE",MAKE_BOOL(true));
 		this.SetVariable("FALSE",MAKE_BOOL(false));
 		this.SetVariable("NULL",MAKE_NULL());
+		//define native function (will be removed later anyways in favor of user defined functions)
+		this.SetVariable("PRINT",MAKE_NATIVE_FUNCTION((args,env)=>{
+			console.log(...args);
+			return MAKE_NULL();
+		}));
 	}
 	public DeclareVariable(varname: string, varvalue: RunTimeValue): RunTimeValue{
 		if(this.Variables.has(varname)){

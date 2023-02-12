@@ -1,5 +1,7 @@
+import Enviroment from "./enviroment.ts";
+
 // deno-lint-ignore-file no-explicit-any
-export type ValueType = "number" | "boolean" | "word" | "jointword"| "object";
+export type ValueType = "number" | "boolean" | "word" | "jointword" | "object" | "nativefuncion";
 
 
 // jointword is 'EnvironmentName::VariableName'
@@ -35,6 +37,13 @@ export interface JointWordValue extends RunTimeValue{
 	Value2: string,
 }
 
+export type FunctionCall = (Arguments:RunTimeValue[], env: Enviroment) => RunTimeValue;
+
+export interface NativeFuncionValue extends RunTimeValue{
+	Type:"nativefuncion",
+	call:FunctionCall
+}
+
 // functions
 export function MAKE_NUMBER(num = 0){
 	return {Value: num, Type: "number"} as NumberValue;
@@ -62,4 +71,6 @@ export function MAKE_BOOL(b: boolean):BooleanValue{
 	if(b)return _MAKE_BOOL(1);
 	return _MAKE_BOOL(-1);
 }
-
+export function MAKE_NATIVE_FUNCTION(call:FunctionCall):NativeFuncionValue{
+	return {Type:"nativefuncion",call} as NativeFuncionValue;
+}

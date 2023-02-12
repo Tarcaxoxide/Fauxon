@@ -16,8 +16,7 @@ export const KEYWORDS: string[]=[
 	"ENV_RETURN",
 	"ENV_NEW",
 	"ENV_DELETE",
-	"ENV_LIST",
-	"PRINT"
+	"ENV_LIST"
 ]
 
 const KEYWORDS_DESCRIPTIONS:Record<string,string> = {
@@ -29,7 +28,6 @@ const KEYWORDS_DESCRIPTIONS:Record<string,string> = {
 	"ENV_NEW"	:"Creates a new environment",
 	"ENV_DELETE":"Deletes an environment",
 	"ENV_LIST"	:"Lists all current enviroments",
-	"PRINT"		:"Prints the value on the right"
 }
 
 
@@ -52,30 +50,6 @@ export function evaluate_Keyword(word: Keyword ,env: Enviroment): RunTimeValue{
 			}
 			return MAKE_WORD(retstring);
 		}
-		case "PRINT":{
-			if(word.Target != undefined && word.Target.Kind == "Baseword" && word.Target.SubKind == "Word"){
-				const VarName = (word.Target as Word).Symbol.Value;
-				const Tvalue = env.LookupVariable(VarName);
-				if(Tvalue.Type == "boolean" && Tvalue.Value == 0)return Tvalue;
-				console.log(Tvalue);
-				return MAKE_BOOL(true);
-			}
-			if(word.Target != undefined && word.Target.Kind == "Baseword" && word.Target.SubKind == "Jointword"){
-				const EnvName = (word.Target as Jointword).Symbol.Value;
-				const VarName = (word.Target as Jointword).SecondSymbol.Value;
-        		const Tenv = Enviroment.Find(EnvName);
-        		if(Tenv == undefined)return MAKE_BOOL(false);
-				const Tvalue = Tenv.LookupVariable(VarName);
-				if(Tvalue.Type == "boolean" && Tvalue.Value == 0)return Tvalue;
-				console.log(Tvalue);
-				return MAKE_BOOL(true);
-			}
-			if(word.Target != undefined && word.Target.Kind == "NumericLiteral"){
-				const val = (word.Target as NumericLiteral).Value;
-				console.log(val);
-				return MAKE_BOOL(true);
-			}
-		}break;
 		case "TIME":{
 			const val = MAKE_NUMBER(Date.now())
 			if(word.Target != undefined && word.Target.Kind == "Baseword" && word.Target.SubKind == "Word"){
