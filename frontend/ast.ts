@@ -3,10 +3,8 @@ import { Token, TokenType } from "./lexer.ts"
 import { BooleanValue, WordValue, JointWordValue } from "../runtime/values.ts"
 
 export type NodeType =
-		//STATEMENTS
 		| "Program"
 		| "VariableDeclaration"
-		// EXPRESSIONS
 		| "NumericLiteral"
 		| "OperatorLiteral"
 		| "Baseword"
@@ -15,6 +13,8 @@ export type NodeType =
 		| "BinaryExpression"
 		| "ObjectLiteral"
 		| "Property"
+		| "MemberExpression"
+		| "CallExpression"
 
 export interface Statement{
 	Kind: NodeType,
@@ -49,6 +49,21 @@ export interface BinaryExpression extends Expression{
 	Left: Expression,
 	Operator: OperatorLiteral,
 	Right: Expression
+}
+
+export interface CallExpression extends Expression{
+	Kind: "CallExpression",
+	SubKind: "None",
+	Arguments: Expression[],
+	Caller: Expression
+}
+
+export interface MemberExpression extends Expression{
+	Kind: "MemberExpression",
+	SubKind: "None",
+	Object: Expression,
+	Property: Expression,
+	Computed: BooleanValue,
 }
 
 export interface ObjectLiteral extends Expression{

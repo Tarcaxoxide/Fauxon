@@ -1,9 +1,8 @@
 // deno-lint-ignore-file no-unreachable
-import { Statement, Program, Expression, BinaryExpression, NumericLiteral, Keyword } from "./ast.ts";
+import { Statement, Program, Expression, BinaryExpression, NumericLiteral, Keyword, Property, CallExpression, MemberExpression, ObjectLiteral } from "./ast.ts";
 import { Token, TypeToString, tokenize, TokenType, IsIn } from "./lexer.ts";
-import { MAKE_BOOL, MAKE_NULL, MAKE_WORD, MAKE_JOINTWORD } from "../runtime/values.ts";
+import { MAKE_BOOL, MAKE_WORD, MAKE_JOINTWORD } from "../runtime/values.ts";
 import { VariableDeclaration, Word, OperatorLiteral } from "./ast.ts";
-import { Env } from "../runtime/interpreter.ts";
 
 export default class Parser{
     private tokens: Token[]=[];
@@ -29,6 +28,7 @@ export default class Parser{
         this.tokens = tokenize(sourceCode);
         const program:Program = {
             Kind: "Program",
+            SubKind: "None",
             Body:[]
         }
         while(this.not_eof()){
@@ -112,10 +112,10 @@ export default class Parser{
         return left;
     }
     private parse_MultiplicationExpression(prog:Program):Expression{
-        let left = this.parse_PrimaryExpression(prog);
+        let left = this.parse_MemberCallExpression(prog);
         while(this.at().Value == "*" || this.at().Value == "/"|| this.at().Value == "%"){
             const operator = this.eat();
-            const right = this.parse_PrimaryExpression(prog);
+            const right = this.parse_MemberCallExpression(prog);
             left = {
                 Kind: "BinaryExpression",
                 Left: left,
@@ -125,16 +125,72 @@ export default class Parser{
         }
         return left;
     }
-    private parse_UnaryExpression(prog:Program):Expression{
-        return this.parse_PrimaryExpression(prog);
+    private parse_MemberCallExpression(prog:Program):Expression{
+        const member = this.parse_MemberExpression(prog)
+        if(this.at().Type == TokenType.LEFT_PARENTHESIS){
+            return this.parse_CallExpression(member,prog);
+        }
+        return member;
     }
+    private parse_CallExpression(Caller:Expression,prog:Program):Expression{
+        let call_expression: Expression = {
+            Kind: "CallExpression",
+            SubKind:"None",
+            Caller,
+            Arguments: this.parse_Arguments(prog)
+        } as CallExpression
+        if(this.at().Type == TokenType.LEFT_PARENTHESIS){
+            call_expression = this.parse_CallExpression(call_expression,prog);
+        }
+        return call_expression;
+    }
+    private parse_Arguments(prog:Program):Expression[]{
+        this.expect(TokenType.LEFT_PARENTHESIS,"Left parenthesis expected");
+        const args = this.at().Type == TokenType.RIGHT_PARENTHESIS
+        ? []
+        : this.parse_Arguments_List(prog);
+        this.expect(TokenType.RIGHT_PARENTHESIS,"Right parenthesis expected");
+        return args;
+    }
+    private parse_Arguments_List(prog:Program):Expression[]{
+        const args = [this.parse_Expression(prog)];
+        while( this.at().Type == TokenType.COMMA && this.eat()){
+            args.push(this.parse_Expression(prog));
+        }
+        return args;
+    }
+    private parse_MemberExpression(prog:Program):Expression{
+        let Object = this.parse_PrimaryExpression(prog);
+        while(this.at().Type == TokenType.DOT || this.at().Type == TokenType.LEFT_BRACE){
+            const operator = this.eat();
+            let Property:Expression
+            let _Computed = false;
+            // None computed values (DOT)
+            if(operator.Type == TokenType.DOT){
+                Property = this.parse_PrimaryExpression(prog)
+                if(Property.Kind != "Baseword" || Property.SubKind != "Word"){
+                    throw 'can not use dot operator when the right side is not a word';
+                }
+
+            }else{
+                _Computed = true;
+                Property = this.parse_Expression(prog);
+                this.expect(TokenType.RIGHT_BRACE,"right brace expected to close member expression.");
+            }
+            Object = {Kind:"MemberExpression",SubKind:"None",Object,Property,Computed:MAKE_BOOL(_Computed)} as MemberExpression;
+        }
+        return Object;
+    }
+    //private parse_UnaryExpression(prog:Program):Expression{
+    //    return this.parse_PrimaryExpression(prog);
+    //}
     private parse_PrimaryExpression(prog:Program):Expression{
         const tt:TokenType = this.at().Type;
         switch(tt){
             case TokenType.WORD:{
                 return {Kind: "Baseword", SubKind: "Word",Symbol: this.eat()} as Word;
             }break;
-            case TokenType.COLON_COLON:{
+            case TokenType.COLON_COLON:{// ::
                 this.eat()
                 const SecondS = this.eat()
                 let S = prog.Body[prog.Body.length-1] as Word;
@@ -168,25 +224,3 @@ export default class Parser{
         }
     }
 }
-
-//Order Of Prescidence
-    //  [Expression]    ->    [AdditionExpression]
-    //  [AssignmentExpression]
-    //  [MemberExpression]
-    //  [FunctionExpression]
-    //  [LogicExpression]
-    //  [ComparisonExpression] 
-    //  [AdditionExpression]    ->    [MultiplicationExpression]
-    //  [MultiplicationExpression]    ->    [PrimaryExpression]
-    //  [UnaryExpression]
-    //  [PrimaryExpression]
-
-
-/*
-export interface Jointword extends Baseword{
-	Kind: "Baseword",
-	SubKind: "Jointword",
-	Symbol: Token,
-	TargetEnviroment: Token,
-}
-*/

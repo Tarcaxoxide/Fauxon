@@ -1,14 +1,12 @@
-ENV_NEW test
-ENV_JUMP test
-TIME apple
+50 / 2 = foo
 {
     100:x,
     32:y,
-    apple:appl,
+    foo:foo,
     {
-        1:bar
+        TRUE:bar
     }:complex
-} = OBJ
-ENV_RETURN 0
-PRINT test::apple
-ENV_DELETE test
+} = obj
+
+obj.complex.bar = f
+obj.foo()  + 5 = foo

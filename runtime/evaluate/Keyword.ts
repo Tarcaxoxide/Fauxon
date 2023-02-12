@@ -9,9 +9,6 @@ import { evaluate_VariableDeclaration } from "./VariableDeclaration.ts";
 
 
 export const KEYWORDS: string[]=[
-	"NULL",
-	"TRUE",
-	"FALSE",
 	"TIME",
 	"HELP",
 	"ENV_HERE",
@@ -24,9 +21,6 @@ export const KEYWORDS: string[]=[
 ]
 
 const KEYWORDS_DESCRIPTIONS:Record<string,string> = {
-	"NULL"		:"A keyword equivalent to 0",
-	"TRUE"		:"A keyword equivalent to positive infinity",
-	"FALSE"		:"A keyword equivalent to negative infinity",
 	"TIME"		:"A keyword equivalent to the current unix time",
 	"HELP"		:"this",
 	"ENV_HERE"	:"Displays the current environment",
@@ -34,7 +28,8 @@ const KEYWORDS_DESCRIPTIONS:Record<string,string> = {
 	"ENV_RETURN":"Returns to the previews environment",
 	"ENV_NEW"	:"Creates a new environment",
 	"ENV_DELETE":"Deletes an environment",
-	"ENV_LIST"	:"Lists all current enviroments"
+	"ENV_LIST"	:"Lists all current enviroments",
+	"PRINT"		:"Prints the value on the right"
 }
 
 
@@ -46,9 +41,6 @@ export function evaluate_SubKeyword(word: Jointword,env: Enviroment){
 
 export function evaluate_Keyword(word: Keyword ,env: Enviroment): RunTimeValue{
 	switch(word.Symbol.Value){
-		case "NULL":{
-			return MAKE_NULL();
-		}
 		case "HELP":{
 			let retstring=""
 			if(word.Target.Target){
@@ -59,12 +51,6 @@ export function evaluate_Keyword(word: Keyword ,env: Enviroment): RunTimeValue{
 				retstring+=Fun+",";
 			}
 			return MAKE_WORD(retstring);
-		}
-        case "TRUE":{
-			return MAKE_BOOL(true);
-		}
-        case "FALSE":{
-			return MAKE_BOOL(false);
 		}
 		case "PRINT":{
 			if(word.Target != undefined && word.Target.Kind == "Baseword" && word.Target.SubKind == "Word"){

@@ -11,6 +11,9 @@ export default class Enviroment{
 		this.Parent=ParentEnv
 		this.Variables = new Map()
 		if(this.Parent != undefined)console.log(`Enviroment ${this.Here()} created.`)
+		this.SetVariable("TRUE",MAKE_BOOL(true));
+		this.SetVariable("FALSE",MAKE_BOOL(false));
+		this.SetVariable("NULL",MAKE_NULL());
 	}
 	public DeclareVariable(varname: string, varvalue: RunTimeValue): RunTimeValue{
 		if(this.Variables.has(varname)){

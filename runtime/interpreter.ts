@@ -69,6 +69,7 @@ export function evaluate(astNode: Statement,env?: Enviroment): RunTimeValue{
 			return evaluate_VariableDeclaration((astNode as VariableDeclaration),Env);
 		}break;
 		default:{
+			console.log("Interpreter doesn't not what to do with this.");
 			console.log(astNode);
 			return MAKE_NULL();
 		}break;
