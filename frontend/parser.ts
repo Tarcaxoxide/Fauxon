@@ -69,7 +69,7 @@ export default class Parser{
                 if(IsIn(Letter,"abcdefghijklmnopqrstuvwxyz"))allcap=false;
             }
             word = MAKE_WORD((ID as Word).Symbol.Value);
-            if(this.at().Type != TokenType.COLON_COLON)return {Kind: "VariableDeclaration", Constant: MAKE_BOOL(allcap), Word: word, Value: exp,Print:print} as VariableDeclaration;
+            if(this.at().Type != TokenType.COLON_COLON)return {Kind: "VariableDeclaration", Constant: MAKE_BOOL(allcap), Word: word, Value: exp,Print:print,VerbosePrint:false} as VariableDeclaration;
             return this.parse_JVariableDeclaration(prog,(ID as Word),(exp as Expression),allcap);
         }else if((ID as UnaryExpression).Operator.Type == TokenType.QUESTION_MARK){
             if( (ID as UnaryExpression).Right.SubKind != "Jointword" ){
@@ -78,7 +78,25 @@ export default class Parser{
                 }
                 word = MAKE_WORD(((ID as UnaryExpression).Right as Word).Symbol.Value);
                 print=true;
-                if(this.at().Type != TokenType.COLON_COLON)return {Kind: "VariableDeclaration", Constant: MAKE_BOOL(allcap), Word: word, Value: exp,Print:print} as VariableDeclaration;
+                if(this.at().Type != TokenType.COLON_COLON)return {Kind: "VariableDeclaration", Constant: MAKE_BOOL(allcap), Word: word, Value: exp,Print:print,VerbosePrint:false} as VariableDeclaration;
+                return this.parse_JVariableDeclaration(prog,(ID as UnaryExpression),(exp as Expression),allcap);
+            }else{
+                for(const Letter of ((ID as UnaryExpression).Right as Jointword).SecondSymbol.Value ){
+                    if(IsIn(Letter,"abcdefghijklmnopqrstuvwxyz"))allcap=false;
+                }
+
+                word = MAKE_JOINTWORD(((ID as UnaryExpression).Right as Jointword).Symbol.Value,((ID as UnaryExpression).Right as Jointword).SecondSymbol.Value);
+                print=true;
+                return {Kind: "VariableDeclaration", Constant: MAKE_BOOL(allcap), Word: word, Value: exp,Print:print} as VariableDeclaration;
+            }
+        }else if((ID as UnaryExpression).Operator.Type == TokenType.VERBOSE_QUESTION_MARK){
+            if( (ID as UnaryExpression).Right.SubKind != "Jointword" ){
+                for(const Letter of ((ID as UnaryExpression).Right as Word).Symbol.Value ){
+                    if(IsIn(Letter,"abcdefghijklmnopqrstuvwxyz"))allcap=false;
+                }
+                word = MAKE_WORD(((ID as UnaryExpression).Right as Word).Symbol.Value);
+                print=true;
+                if(this.at().Type != TokenType.COLON_COLON)return {Kind: "VariableDeclaration", Constant: MAKE_BOOL(allcap), Word: word, Value: exp,Print:print,VerbosePrint:true} as VariableDeclaration;
                 return this.parse_JVariableDeclaration(prog,(ID as UnaryExpression),(exp as Expression),allcap);
             }else{
                 for(const Letter of ((ID as UnaryExpression).Right as Jointword).SecondSymbol.Value ){
@@ -214,7 +232,6 @@ export default class Parser{
                 //{Kind: "Baseword", SubKind: "Jointword",Symbol: S, SecondSymbol: SecondS} as Jointword;
             }
         }
-    
         return this.parse_MemberCallExpression(prog);
     }
     private parse_MemberCallExpression(prog:Program):Expression{

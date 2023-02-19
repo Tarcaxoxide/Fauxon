@@ -1,14 +1,1 @@
-50 / 2 = foo
-100 = a
-{
-    100:x,
-    32:y,
-    foo:foo,
-    {
-        TRUE:bar
-    }:complex
-} = obj
-
-obj.complex.bar = f
-
-PRINT(foo,45,TRUE,10,11,a)
+{10:a,15:b} = testvar ??testvar

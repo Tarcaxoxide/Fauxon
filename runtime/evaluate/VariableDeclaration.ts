@@ -20,7 +20,7 @@ export function evaluate_VariableDeclaration(VarToSet:VariableDeclaration,env: E
             if(Value == undefined){ret = Tenv.AssignVariable(VarName,MAKE_NULL());}else{ret = Tenv.AssignVariable(VarName,Value);}
         }else if(ret.Value == -1 && VarToSet.Constant.Value == 1){
             Value = Tenv.LookupVariable(VarName);
-            if(VarToSet.Print)console.log(Value);
+            if(VarToSet.Print && VarToSet.VerbosePrint){console.log(Value);}else if(VarToSet){console.log(Value.Value)}
             return Value;
         }
     }else{
@@ -29,13 +29,13 @@ export function evaluate_VariableDeclaration(VarToSet:VariableDeclaration,env: E
             if(Value == undefined){ret = Tenv.AssignVariable(VarToSet.Word.Value,MAKE_NULL());}else{ret = Tenv.AssignVariable(VarToSet.Word.Value,Value);}
         }else if(ret.Value == -1 && VarToSet.Constant.Value == 1){
             Value = Tenv.LookupVariable(VarToSet.Word.Value);
-            if(VarToSet.Print)console.log(Value);
+            if(VarToSet.Print && VarToSet.VerbosePrint){console.log(Value);}else if(VarToSet){console.log(Value.Value)}
             return Value;
         }
     }
 
     if(Value != undefined){
-        if(VarToSet.Print)console.log(Value);
+        if(VarToSet.Print && VarToSet.VerbosePrint){console.log(Value);}else if(VarToSet){console.log(Value.Value)}
         return Value;
     }
     return MAKE_NULL();

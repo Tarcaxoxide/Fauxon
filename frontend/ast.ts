@@ -34,7 +34,8 @@ export interface VariableDeclaration extends Statement{
 	Constant: BooleanValue,
 	Word: WordValue|JointWordValue|UnaryExpression,
 	Value?: Expression,
-	Print:boolean
+	Print:boolean,
+	VerbosePrint:boolean
 }
 
 export interface Expression extends Statement{}

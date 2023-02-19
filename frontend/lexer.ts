@@ -172,7 +172,7 @@ export function tokenize (sourceCode: string): Token[]{
                         tokens[tokens.length-1].Value+='?';src.shift();
 					}break;
 					default:{
-						tokens.push(token(src.shift(),TokenType.COLON));
+						tokens.push(token(src.shift(),TokenType.QUESTION_MARK));
 					}break;
 				}
 			}break;
