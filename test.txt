@@ -1,5 +1,6 @@
-{10:a,15:b} = a
+{10:a,15:b} = object
 
 
-?a.a ;
-??a
+?object.a;
+??object;
+?object.b;
