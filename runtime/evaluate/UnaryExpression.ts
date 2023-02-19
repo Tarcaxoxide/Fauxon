@@ -17,6 +17,10 @@ export function evaluate_UnaryExpression(unary: UnaryExpression ,env: Enviroment
         }break;
         case TokenType.QUESTION_MARK:{
             const V = evaluate(unary.Right);
+            console.log(V.Value);
+        }break;
+        case TokenType.VERBOSE_QUESTION_MARK:{
+            const V = evaluate(unary.Right);
             console.log(V);
         }break;
         default:{}break;

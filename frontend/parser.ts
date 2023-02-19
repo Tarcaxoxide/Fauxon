@@ -171,7 +171,7 @@ export default class Parser{
     private parse_UnaryExpression(prog:Program):Expression{
         // -1 * 1 + +4
         // if [nil] {[op] [num]} || [op] {[op] [num]} then unary
-        if((prog.Body.length == 0 && (this.at().Type == TokenType.PLUS||this.at().Type == TokenType.MINUS||this.at().Type == TokenType.QUESTION_MARK))){
+        if((prog.Body.length == 0 && (this.at().Type == TokenType.PLUS||this.at().Type == TokenType.MINUS||this.at().Type == TokenType.QUESTION_MARK||this.at().Type == TokenType.VERBOSE_QUESTION_MARK))){
             const operator = this.eat();
             const right = this.parse_PrimaryExpression(prog);
             if(this.at().Type != TokenType.COLON_COLON){
@@ -192,7 +192,7 @@ export default class Parser{
                 } as UnaryExpression;
                 //{Kind: "Baseword", SubKind: "Jointword",Symbol: S, SecondSymbol: SecondS} as Jointword;
             }
-        }else if(((prog.Body.length > 0 && prog.Body[prog.Body.length-1].Kind != "UnaryExpression" && prog.Body[prog.Body.length-1].Kind != "BinaryExpression" && prog.Body[prog.Body.length-1].Kind != "NumericLiteral" ) && (this.at().Type == TokenType.PLUS||this.at().Type == TokenType.MINUS||this.at().Type == TokenType.QUESTION_MARK))){
+        }else if(((prog.Body.length > 0 && prog.Body[prog.Body.length-1].Kind != "UnaryExpression" && prog.Body[prog.Body.length-1].Kind != "BinaryExpression" && prog.Body[prog.Body.length-1].Kind != "NumericLiteral" ) && (this.at().Type == TokenType.PLUS||this.at().Type == TokenType.MINUS||this.at().Type == TokenType.QUESTION_MARK||this.at().Type == TokenType.VERBOSE_QUESTION_MARK))){
             const operator = this.eat();
             const right = this.parse_PrimaryExpression(prog);
             if(this.at().Type != TokenType.COLON_COLON){

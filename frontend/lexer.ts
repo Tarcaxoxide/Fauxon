@@ -18,6 +18,7 @@ export enum TokenType{
 	,MODULUS
 	,DOT
 	,QUESTION_MARK
+	,VERBOSE_QUESTION_MARK
 	,LESS
 	,SMALLER
 	,MORE
@@ -75,6 +76,7 @@ export function TypeToString(Type:TokenType): string{
 		case TokenType.MODULUS:{result="MODULUS";}break;
 		case TokenType.DOT:{result="DOT";}break;
 		case TokenType.QUESTION_MARK:{result="QUESTION_MARK";}break;
+		case TokenType.VERBOSE_QUESTION_MARK:{result="VERBOSE_QUESTION_MARK";}break;
 		case TokenType.LESS:{result="LESS";}break;
 		case TokenType.SMALLER:{result="SMALLER";}break;
 		case TokenType.MORE:{result="MORE";}break;
@@ -160,7 +162,19 @@ export function tokenize (sourceCode: string): Token[]{
 				tokens.push(token(src.shift(),TokenType.NOT));
 			}break;
 			case '?':{
-				tokens.push(token(src.shift(),TokenType.QUESTION_MARK));
+				if(tokens.length == 0){
+					tokens.push(token(src.shift(),TokenType.QUESTION_MARK));
+					continue;
+				}
+				switch(tokens[tokens.length-1].Type){
+					case TokenType.QUESTION_MARK:{
+						tokens[tokens.length-1].Type = TokenType.VERBOSE_QUESTION_MARK;
+                        tokens[tokens.length-1].Value+='?';src.shift();
+					}break;
+					default:{
+						tokens.push(token(src.shift(),TokenType.COLON));
+					}break;
+				}
 			}break;
 			case ';':{
 				tokens.push(token(src.shift(),TokenType.SEMICOLON));
