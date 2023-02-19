@@ -1,4 +1,6 @@
-{10:a,15:b} = testvar;
+{10:a,15:b} = Test::testvar;
 
-?testvar[a];
-??testvar[b];
+?Test::testvar[a];
+??Test::testvar[b];
+
+?ENV_LIST
