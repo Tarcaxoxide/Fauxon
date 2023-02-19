@@ -47,11 +47,12 @@ export enum TokenType{
 
 export interface Token{
  	Type: TokenType,
-	Value: string;
+	Value: string,
+	Kind:"Token",
 }
 
 export function token (Value = "", Type: TokenType): Token{
-	return {Value, Type};
+	return {Value, Type,Kind:"Token"};
 }
 
 export function TypeToString(Type:TokenType): string{

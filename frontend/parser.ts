@@ -86,6 +86,7 @@ export default class Parser{
                 }
 
                 word = MAKE_JOINTWORD(((ID as UnaryExpression).Right as Jointword).Symbol.Value,((ID as UnaryExpression).Right as Jointword).SecondSymbol.Value);
+                print=true;
                 return {Kind: "VariableDeclaration", Constant: MAKE_BOOL(allcap), Word: word, Value: exp,Print:print} as VariableDeclaration;
             }
         }

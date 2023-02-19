@@ -104,7 +104,7 @@ export interface Jointword extends Baseword{
 	Kind: "Baseword",
 	SubKind: "Jointword",
 	Symbol: Token,
-	SecondSymbol: Token
+	SecondSymbol: Token|Word
 }
 
 export interface Keyword extends Baseword{
