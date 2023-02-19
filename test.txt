@@ -1,7 +1,7 @@
 15 = ??scope::a;
 ??scope::a;
 ??16;
-{17:a,18:b} = ??object;
+{17:a,18:b} = object;
 ?object.a;
 ??object;
 ?object.b;
