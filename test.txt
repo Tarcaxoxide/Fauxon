@@ -1,6 +1,12 @@
-{10:a,15:b} = object
-
-
+15 = ??scope::a;
+??scope::a;
+??16;
+{17:a,18:b} = object;
 ?object.a;
 ??object;
 ?object.b;
+??19;
+{20:a,21:b} = scope::object;
+??scope::object.a;
+?scope::object.b;
+??22;

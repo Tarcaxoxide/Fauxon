@@ -65,12 +65,22 @@ export default class Parser{
         let word;
         let print=false;
         if(ID.Kind != "UnaryExpression"){
-            for(const Letter of (ID as Word).Symbol.Value ){
-                if(IsIn(Letter,"abcdefghijklmnopqrstuvwxyz"))allcap=false;
+            if(ID.SubKind != "Jointword"){
+                for(const Letter of (ID as Word).Symbol.Value ){
+                    if(IsIn(Letter,"abcdefghijklmnopqrstuvwxyz"))allcap=false;
+                }
+                word = MAKE_WORD((ID as Word).Symbol.Value);
+                if(this.at().Type != TokenType.COLON_COLON)return {Kind: "VariableDeclaration", Constant: MAKE_BOOL(allcap), Word: word, Value: exp,Print:print,VerbosePrint:false} as VariableDeclaration;
+                return this.parse_JVariableDeclaration(prog,(ID as Word),(exp as Expression),allcap);
+            }else{
+                for(const Letter of (ID as Jointword).SecondSymbol.Value ){
+                    if(IsIn(Letter,"abcdefghijklmnopqrstuvwxyz"))allcap=false;
+                }
+
+                word = MAKE_JOINTWORD((ID as Jointword).Symbol.Value,(ID as Jointword).SecondSymbol.Value);
+                
+                return {Kind: "VariableDeclaration", Constant: MAKE_BOOL(allcap), Word: word, Value: exp,Print:print} as VariableDeclaration;
             }
-            word = MAKE_WORD((ID as Word).Symbol.Value);
-            if(this.at().Type != TokenType.COLON_COLON)return {Kind: "VariableDeclaration", Constant: MAKE_BOOL(allcap), Word: word, Value: exp,Print:print,VerbosePrint:false} as VariableDeclaration;
-            return this.parse_JVariableDeclaration(prog,(ID as Word),(exp as Expression),allcap);
         }else if((ID as UnaryExpression).Operator.Type == TokenType.QUESTION_MARK){
             if( (ID as UnaryExpression).Right.SubKind != "Jointword" ){
                 for(const Letter of ((ID as UnaryExpression).Right as Word).Symbol.Value ){
