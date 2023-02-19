@@ -6,11 +6,12 @@ import { MAKE_NULL, ObjectValue, RunTimeValue } from "../values.ts";
 
 
 export function evaluate_ObjectExpression(obj:ObjectLiteral,env: Enviroment): RunTimeValue{
-    const object = {Type:"object",Properties: new Map} as ObjectValue
-    for(const {Key,Value} of obj.Properties){
-      let RunTimeValue = MAKE_NULL();
-      if(Value != undefined)RunTimeValue=evaluate(Value);
-      object.Properties.set(Key,RunTimeValue);
-    }
-    return object;
+  const object = {Type:"object",Properties: new Map} as ObjectValue
+  for(const {Kind,SubKind,Key,Value} of obj.Properties){
+    let RunTimeValue = MAKE_NULL();
+    if(Value != undefined)RunTimeValue=evaluate(Value);
+
+    object.Properties.set((Key as Token).Value,RunTimeValue);
+  }
+  return object;
 }

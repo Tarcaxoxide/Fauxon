@@ -191,7 +191,7 @@ export default class Parser{
         // if [nil] {[op] [num]} || [op] {[op] [num]} then unary
         if((prog.Body.length == 0 && (this.at().Type == TokenType.PLUS||this.at().Type == TokenType.MINUS||this.at().Type == TokenType.QUESTION_MARK||this.at().Type == TokenType.VERBOSE_QUESTION_MARK))){
             const operator = this.eat();
-            const right = this.parse_PrimaryExpression(prog);
+            const right = this.parse_MemberCallExpression(prog);
             if(this.at().Type != TokenType.COLON_COLON){
                 return {
                     Kind: "UnaryExpression",
@@ -201,7 +201,7 @@ export default class Parser{
                 } as UnaryExpression;
             }else{
                 this.eat();
-                const next_right = this.parse_PrimaryExpression(prog);
+                const next_right = this.parse_MemberCallExpression(prog);
                 return {
                     Kind: "UnaryExpression",
                     SubKind:"None",
@@ -212,7 +212,7 @@ export default class Parser{
             }
         }else if(((prog.Body.length > 0 && prog.Body[prog.Body.length-1].Kind != "UnaryExpression" && prog.Body[prog.Body.length-1].Kind != "BinaryExpression" && prog.Body[prog.Body.length-1].Kind != "NumericLiteral" ) && (this.at().Type == TokenType.PLUS||this.at().Type == TokenType.MINUS||this.at().Type == TokenType.QUESTION_MARK||this.at().Type == TokenType.VERBOSE_QUESTION_MARK))){
             const operator = this.eat();
-            const right = this.parse_PrimaryExpression(prog);
+            const right = this.parse_MemberCallExpression(prog);
             if(this.at().Type != TokenType.COLON_COLON){
                 return {
                     Kind: "UnaryExpression",
@@ -222,7 +222,7 @@ export default class Parser{
                 } as UnaryExpression;
             }else{
                 this.eat();
-                const next_right = this.parse_PrimaryExpression(prog);
+                const next_right = this.parse_MemberCallExpression(prog);
                 return {
                     Kind: "UnaryExpression",
                     SubKind:"None",
@@ -280,7 +280,6 @@ export default class Parser{
                 if(Property.Kind != "Baseword" || Property.SubKind != "Word"){
                     throw 'can not use dot operator when the right side is not a word';
                 }
-
             }else{
                 _Computed = true;
                 Property = this.parse_Expression(prog);
@@ -309,6 +308,9 @@ export default class Parser{
                 }
                 return {Kind: "Baseword", SubKind: "Jointword",Symbol: S, SecondSymbol: SecondS} as Jointword;
             }
+            case TokenType.SEMICOLON:{
+                return {Kind: "Baseword", SubKind: "Word",Symbol: this.eat()} as Word;
+            }break;
             case TokenType.KEYWORD:{
                 const _a = this.eat();
                 let _b=this.at();

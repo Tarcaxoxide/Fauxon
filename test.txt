@@ -1,1 +1,4 @@
-{10:a,15:b} = testvar ??testvar
+{10:a,15:b} = testvar;
+
+?testvar[a];
+??testvar[b];
