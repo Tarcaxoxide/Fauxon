@@ -7,6 +7,7 @@
 ?object.b;
 ??19;
 {20:a,21:b} = ??scope::object;
-??scope::object.a;
+?scope::object.a;
+??scope::object;
 ?scope::object.b;
 ??22;
