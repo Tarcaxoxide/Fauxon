@@ -19,17 +19,24 @@ export function evaluate_VariableDeclaration(VarToSet:VariableDeclaration,env: E
         if(ret.Value == -1 && VarToSet.Constant.Value == -1){
             if(Value == undefined){ret = Tenv.AssignVariable(VarName,MAKE_NULL());}else{ret = Tenv.AssignVariable(VarName,Value);}
         }else if(ret.Value == -1 && VarToSet.Constant.Value == 1){
-            return Tenv.LookupVariable(VarName);
+            Value = Tenv.LookupVariable(VarName);
+            if(VarToSet.Print)console.log(Value);
+            return Value;
         }
     }else{
         if(Value == undefined){ret = Tenv.DeclareVariable(VarToSet.Word.Value,MAKE_NULL());}else{ret = Tenv.DeclareVariable(VarToSet.Word.Value,Value);}
         if(ret.Value == -1 && VarToSet.Constant.Value == -1){
             if(Value == undefined){ret = Tenv.AssignVariable(VarToSet.Word.Value,MAKE_NULL());}else{ret = Tenv.AssignVariable(VarToSet.Word.Value,Value);}
         }else if(ret.Value == -1 && VarToSet.Constant.Value == 1){
-            return Tenv.LookupVariable(VarToSet.Word.Value);
+            Value = Tenv.LookupVariable(VarToSet.Word.Value);
+            if(VarToSet.Print)console.log(Value);
+            return Value;
         }
     }
 
-    if(Value != undefined)return Value;
+    if(Value != undefined){
+        if(VarToSet.Print)console.log(Value);
+        return Value;
+    }
     return MAKE_NULL();
 }

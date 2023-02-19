@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-unreachable
 import { RunTimeValue, MAKE_NULL, _MAKE_BOOL, NumberValue, NativeFuncionValue } from "./values.ts"
-import {   Word, Keyword, BinaryExpression, Program, Statement, NumericLiteral, VariableDeclaration, ObjectLiteral, Jointword, CallExpression } from "../frontend/ast.ts"
+import {   Word, Keyword, BinaryExpression, Program, Statement, NumericLiteral, VariableDeclaration, ObjectLiteral, Jointword, CallExpression, UnaryExpression } from "../frontend/ast.ts"
 import Enviroment from "./enviroment.ts"
 import { evaluate_BinaryExpression } from "./evaluate/BinaryExpression.ts";
 import { evaluate_Program } from "./evaluate/Program.ts";
@@ -10,6 +10,7 @@ import { evaluate_Keyword, evaluate_SubKeyword } from "./evaluate/Keyword.ts";
 import { evaluate_Jointword } from "./evaluate/Jointword.ts";
 import { evaluate_ObjectExpression } from "./evaluate/ObjectExpression.ts";
 import { evaluate_CallExpression } from "./evaluate/CallExpression.ts";
+import { evaluate_UnaryExpression } from "./evaluate/UnaryExpression.ts";
 
 
 export let Env=undefined
@@ -71,6 +72,9 @@ export function evaluate(astNode: Statement,env?: Enviroment): RunTimeValue{
 		}
 		case "CallExpression":{
 			return evaluate_CallExpression((astNode as CallExpression),Env);
+		}
+		case "UnaryExpression":{
+			return evaluate_UnaryExpression((astNode as UnaryExpression),Env);
 		}
 		default:{
 			console.log("Interpreter doesn't not what to do with this.");

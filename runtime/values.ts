@@ -1,3 +1,4 @@
+import { UnaryExpression, Word } from "../frontend/ast.ts";
 import Enviroment from "./enviroment.ts";
 
 // deno-lint-ignore-file no-explicit-any
@@ -8,7 +9,7 @@ export type ValueType = "number" | "boolean" | "word" | "jointword" | "object" |
 
 export interface RunTimeValue{
 	Type: ValueType,
-	Value: any
+	Value: any,
 }
 
 export interface NumberValue extends RunTimeValue{

@@ -17,6 +17,7 @@ export enum TokenType{
 	,DIVIDE_EQUALS
 	,MODULUS
 	,DOT
+	,QUESTION_MARK
 	,LESS
 	,SMALLER
 	,MORE
@@ -72,6 +73,7 @@ export function TypeToString(Type:TokenType): string{
 		case TokenType.DIVIDE_EQUALS:{result="DIVIDE_EQUALS";}break;
 		case TokenType.MODULUS:{result="MODULUS";}break;
 		case TokenType.DOT:{result="DOT";}break;
+		case TokenType.QUESTION_MARK:{result="QUESTION_MARK";}break;
 		case TokenType.LESS:{result="LESS";}break;
 		case TokenType.SMALLER:{result="SMALLER";}break;
 		case TokenType.MORE:{result="MORE";}break;
@@ -155,6 +157,9 @@ export function tokenize (sourceCode: string): Token[]{
 			}break;
 			case '!':{
 				tokens.push(token(src.shift(),TokenType.NOT));
+			}break;
+			case '?':{
+				tokens.push(token(src.shift(),TokenType.QUESTION_MARK));
 			}break;
 			case ';':{
 				tokens.push(token(src.shift(),TokenType.SEMICOLON));

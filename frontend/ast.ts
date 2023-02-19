@@ -11,6 +11,7 @@ export type NodeType =
 		| "Word"
 		| "Keyword"
 		| "BinaryExpression"
+		| "UnaryExpression"
 		| "ObjectLiteral"
 		| "Property"
 		| "MemberExpression"
@@ -31,8 +32,9 @@ export interface VariableDeclaration extends Statement{
 	Kind: "VariableDeclaration",
 	SubKind: "None",
 	Constant: BooleanValue,
-	Word: WordValue|JointWordValue,
-	Value?: Expression
+	Word: WordValue|JointWordValue|UnaryExpression,
+	Value?: Expression,
+	Print:boolean
 }
 
 export interface Expression extends Statement{}
@@ -47,6 +49,13 @@ export interface BinaryExpression extends Expression{
 	Kind: "BinaryExpression",
 	SubKind: "None",
 	Left: Expression,
+	Operator: OperatorLiteral,
+	Right: Expression
+}
+
+export interface UnaryExpression extends Expression{
+	Kind: "UnaryExpression",
+	SubKind: "None",
 	Operator: OperatorLiteral,
 	Right: Expression
 }

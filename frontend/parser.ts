@@ -1,5 +1,5 @@
 // deno-lint-ignore-file no-unreachable
-import { Statement, Program, Expression, BinaryExpression, NumericLiteral, Keyword, Property, CallExpression, MemberExpression, ObjectLiteral } from "./ast.ts";
+import { Statement, Program, Expression, BinaryExpression, NumericLiteral, Keyword, Property, CallExpression, MemberExpression, ObjectLiteral, UnaryExpression, Jointword } from "./ast.ts";
 import { Token, TypeToString, tokenize, TokenType, IsIn } from "./lexer.ts";
 import { MAKE_BOOL, MAKE_WORD, MAKE_JOINTWORD } from "../runtime/values.ts";
 import { VariableDeclaration, Word, OperatorLiteral } from "./ast.ts";
@@ -59,14 +59,36 @@ export default class Parser{
         prog.Body.reverse().shift();
         prog.Body.reverse();
         this.expect(TokenType.EQUALS,'this should have been equals?');
-        const ID = this.parse_PrimaryExpression(prog)
+        const ID = this.parse_UnaryExpression(prog)
         if(ID.Kind != "Baseword" && ID.SubKind == "Word")throw 'a variable name as a word was expected.';
         let allcap = true;
-        for(const Letter of (ID as Word).Symbol.Value ){
-            if(IsIn(Letter,"abcdefghijklmnopqrstuvwxyz"))allcap=false;
+        let word;
+        let print=false;
+        if(ID.Kind != "UnaryExpression"){
+            for(const Letter of (ID as Word).Symbol.Value ){
+                if(IsIn(Letter,"abcdefghijklmnopqrstuvwxyz"))allcap=false;
+            }
+            word = MAKE_WORD((ID as Word).Symbol.Value);
+            if(this.at().Type != TokenType.COLON_COLON)return {Kind: "VariableDeclaration", Constant: MAKE_BOOL(allcap), Word: word, Value: exp,Print:print} as VariableDeclaration;
+            return this.parse_JVariableDeclaration(prog,(ID as Word),(exp as Expression),allcap);
+        }else if((ID as UnaryExpression).Operator.Type == TokenType.QUESTION_MARK){
+            if( (ID as UnaryExpression).Right.SubKind != "Jointword" ){
+                for(const Letter of ((ID as UnaryExpression).Right as Word).Symbol.Value ){
+                    if(IsIn(Letter,"abcdefghijklmnopqrstuvwxyz"))allcap=false;
+                }
+                word = MAKE_WORD(((ID as UnaryExpression).Right as Word).Symbol.Value);
+                print=true;
+                if(this.at().Type != TokenType.COLON_COLON)return {Kind: "VariableDeclaration", Constant: MAKE_BOOL(allcap), Word: word, Value: exp,Print:print} as VariableDeclaration;
+                return this.parse_JVariableDeclaration(prog,(ID as UnaryExpression),(exp as Expression),allcap);
+            }else{
+                for(const Letter of ((ID as UnaryExpression).Right as Jointword).SecondSymbol.Value ){
+                    if(IsIn(Letter,"abcdefghijklmnopqrstuvwxyz"))allcap=false;
+                }
+
+                word = MAKE_JOINTWORD(((ID as UnaryExpression).Right as Jointword).Symbol.Value,((ID as UnaryExpression).Right as Jointword).SecondSymbol.Value);
+                return {Kind: "VariableDeclaration", Constant: MAKE_BOOL(allcap), Word: word, Value: exp,Print:print} as VariableDeclaration;
+            }
         }
-        if(this.at().Type != TokenType.COLON_COLON)return {Kind: "VariableDeclaration", Constant: MAKE_BOOL(allcap), Word: MAKE_WORD((ID as Word).Symbol.Value), Value: exp} as VariableDeclaration;
-        return this.parse_JVariableDeclaration(prog,(ID as Word),(exp as Expression),allcap);
     }
     private parse_ObjectExpression(prog:Program):Expression{
         this.eat();
@@ -76,9 +98,8 @@ export default class Parser{
             if(this.at().Type == TokenType.LEFT_CURLYBRACE){
                 _Value = this.parse_ObjectExpression(prog);
             }else{
-                _Value = this.parse_PrimaryExpression(prog);
+                _Value = this.parse_UnaryExpression(prog);
             }
-            console.log(_Value)
             this.eat();
             const _Key = this.expect(TokenType.WORD,"Word as key expected.");
             if(this.at().Type != TokenType.RIGHT_CURLYBRACE)this.expect(TokenType.COMMA,"Comma seperator expected");
@@ -87,15 +108,36 @@ export default class Parser{
         this.expect(TokenType.RIGHT_CURLYBRACE,"Object not closed.");
         return { Kind:"ObjectLiteral", SubKind:"None", Properties: properties} as ObjectLiteral
     }
-    private parse_JVariableDeclaration(prog:Program,EnvName:Word,exp:Expression,PrevAllCap:boolean):Statement{
+    private parse_JVariableDeclaration(prog:Program,EnvName:Word|UnaryExpression,exp:Expression,PrevAllCap:boolean):Statement{
         // EXP = EnvName(::)ID
+        // EXP = ?EnvName(::)ID
         let allcap = PrevAllCap
+        let word;
+        let print=false;
         this.expect(TokenType.COLON_COLON,'this should have been COLON_COLON?');
-        const ID = this.parse_PrimaryExpression(prog)
-        for(const Letter of (ID as Word).Symbol.Value ){
-            if(IsIn(Letter,"abcdefghijklmnopqrstuvwxyz"))allcap=false;
+        const ID = this.parse_UnaryExpression(prog)
+        if(ID.Kind != "UnaryExpression"){
+            for(const Letter of (ID as Word).Symbol.Value ){
+                if(IsIn(Letter,"abcdefghijklmnopqrstuvwxyz"))allcap=false;
+            }
+            if(EnvName.Kind != "UnaryExpression"){
+                word = MAKE_JOINTWORD((EnvName as Word).Symbol.Value,(ID as Word).Symbol.Value);
+            }else{
+                word = MAKE_JOINTWORD((EnvName.Right as Word).Symbol.Value,(ID as Word).Symbol.Value);
+                print=true;
+            }
+        }else if((ID as UnaryExpression).Operator.Type == TokenType.QUESTION_MARK){
+            for(const Letter of ((ID as UnaryExpression).Right as Word).Symbol.Value ){
+                if(IsIn(Letter,"abcdefghijklmnopqrstuvwxyz"))allcap=false;
+            }
+            print=true;
+            if(EnvName.Kind != "UnaryExpression"){
+                word = MAKE_JOINTWORD((EnvName as Word).Symbol.Value,((ID as UnaryExpression).Right as Word).Symbol.Value);
+            }else{
+                word = MAKE_JOINTWORD((EnvName.Right as Word).Symbol.Value,((ID as UnaryExpression).Right as Word).Symbol.Value);
+            }
         }
-        return {Kind: "VariableDeclaration", Constant: MAKE_BOOL(allcap), Word: MAKE_JOINTWORD((EnvName as Word).Symbol.Value,(ID as Word).Symbol.Value), Value: exp} as VariableDeclaration;
+        return {Kind: "VariableDeclaration", Constant: MAKE_BOOL(allcap), Word: word, Value: exp, Print:print} as VariableDeclaration;
     }
     private parse_AdditionExpression(prog:Program):Expression{
         let left = this.parse_MultiplicationExpression(prog);
@@ -112,10 +154,10 @@ export default class Parser{
         return left;
     }
     private parse_MultiplicationExpression(prog:Program):Expression{
-        let left = this.parse_MemberCallExpression(prog);
+        let left = this.parse_UnaryExpression(prog);
         while(this.at().Value == "*" || this.at().Value == "/"|| this.at().Value == "%"){
             const operator = this.eat();
-            const right = this.parse_MemberCallExpression(prog);
+            const right = this.parse_UnaryExpression(prog);
             left = {
                 Kind: "BinaryExpression",
                 Left: left,
@@ -124,6 +166,55 @@ export default class Parser{
             } as BinaryExpression
         }
         return left;
+    }
+    private parse_UnaryExpression(prog:Program):Expression{
+        // -1 * 1 + +4
+        // if [nil] {[op] [num]} || [op] {[op] [num]} then unary
+        if((prog.Body.length == 0 && (this.at().Type == TokenType.PLUS||this.at().Type == TokenType.MINUS||this.at().Type == TokenType.QUESTION_MARK))){
+            const operator = this.eat();
+            const right = this.parse_PrimaryExpression(prog);
+            if(this.at().Type != TokenType.COLON_COLON){
+                return {
+                    Kind: "UnaryExpression",
+                    SubKind:"None",
+			    	Operator: ({Kind:"OperatorLiteral",SubKind:"None",Type:operator.Type} as OperatorLiteral),
+			    	Right: right
+                } as UnaryExpression;
+            }else{
+                this.eat();
+                const next_right = this.parse_PrimaryExpression(prog);
+                return {
+                    Kind: "UnaryExpression",
+                    SubKind:"None",
+			    	Operator: ({Kind:"OperatorLiteral",SubKind:"None",Type:operator.Type} as OperatorLiteral),
+			    	Right: ({Kind: "Baseword", SubKind: "Jointword",Symbol: (right as Word).Symbol, SecondSymbol: (next_right as Word).Symbol} as Jointword)
+                } as UnaryExpression;
+                //{Kind: "Baseword", SubKind: "Jointword",Symbol: S, SecondSymbol: SecondS} as Jointword;
+            }
+        }else if(((prog.Body.length > 0 && prog.Body[prog.Body.length-1].Kind != "UnaryExpression" && prog.Body[prog.Body.length-1].Kind != "BinaryExpression" && prog.Body[prog.Body.length-1].Kind != "NumericLiteral" ) && (this.at().Type == TokenType.PLUS||this.at().Type == TokenType.MINUS||this.at().Type == TokenType.QUESTION_MARK))){
+            const operator = this.eat();
+            const right = this.parse_PrimaryExpression(prog);
+            if(this.at().Type != TokenType.COLON_COLON){
+                return {
+                    Kind: "UnaryExpression",
+                    SubKind:"None",
+			    	Operator: ({Kind:"OperatorLiteral",SubKind:"None",Type:operator.Type} as OperatorLiteral),
+			    	Right: right
+                } as UnaryExpression;
+            }else{
+                this.eat();
+                const next_right = this.parse_PrimaryExpression(prog);
+                return {
+                    Kind: "UnaryExpression",
+                    SubKind:"None",
+			    	Operator: ({Kind:"OperatorLiteral",SubKind:"None",Type:operator.Type} as OperatorLiteral),
+			    	Right: ({Kind: "Baseword", SubKind: "Jointword",Symbol: (right as Word).Symbol, SecondSymbol: (next_right as Word).Symbol} as Jointword)
+                } as UnaryExpression;
+                //{Kind: "Baseword", SubKind: "Jointword",Symbol: S, SecondSymbol: SecondS} as Jointword;
+            }
+        }
+    
+        return this.parse_MemberCallExpression(prog);
     }
     private parse_MemberCallExpression(prog:Program):Expression{
         const member = this.parse_MemberExpression(prog)
