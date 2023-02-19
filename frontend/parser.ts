@@ -211,8 +211,10 @@ export default class Parser{
                 //{Kind: "Baseword", SubKind: "Jointword",Symbol: S, SecondSymbol: SecondS} as Jointword;
             }
         }else if(((prog.Body.length > 0 && prog.Body[prog.Body.length-1].Kind != "UnaryExpression" && prog.Body[prog.Body.length-1].Kind != "BinaryExpression" && prog.Body[prog.Body.length-1].Kind != "NumericLiteral" ) && (this.at().Type == TokenType.PLUS||this.at().Type == TokenType.MINUS||this.at().Type == TokenType.QUESTION_MARK||this.at().Type == TokenType.VERBOSE_QUESTION_MARK))){
+            //??test::testvar.a
             const operator = this.eat();
-            const right = this.parse_MemberCallExpression(prog);
+            //test::testvar.a
+            const right = this.parse_Expression(prog);
             if(this.at().Type != TokenType.COLON_COLON){
                 return {
                     Kind: "UnaryExpression",
@@ -222,7 +224,7 @@ export default class Parser{
                 } as UnaryExpression;
             }else{
                 this.eat();
-                const next_right = this.parse_MemberCallExpression(prog);
+                const next_right = this.parse_Expression(prog);
                 return {
                     Kind: "UnaryExpression",
                     SubKind:"None",
@@ -296,7 +298,13 @@ export default class Parser{
         const tt:TokenType = this.at().Type;
         switch(tt){
             case TokenType.WORD:{
-                return {Kind: "Baseword", SubKind: "Word",Symbol: this.eat()} as Word;
+                const S = this.eat();
+                if(this.at().Type == TokenType.COLON_COLON){
+                    this.eat();
+                    const SecondS = this.eat();
+                    return {Kind: "Baseword", SubKind: "Jointword",Symbol: S, SecondSymbol: SecondS} as Jointword;
+                }
+                return {Kind: "Baseword", SubKind: "Word",Symbol: S} as Word;
             }break;
             case TokenType.COLON_COLON:{// ::
                 this.eat()
@@ -308,9 +316,6 @@ export default class Parser{
                 }
                 return {Kind: "Baseword", SubKind: "Jointword",Symbol: S, SecondSymbol: SecondS} as Jointword;
             }
-            case TokenType.SEMICOLON:{
-                return {Kind: "Baseword", SubKind: "Word",Symbol: this.eat()} as Word;
-            }break;
             case TokenType.KEYWORD:{
                 const _a = this.eat();
                 let _b=this.at();
@@ -318,6 +323,9 @@ export default class Parser{
                     _b = this.parse_Expression();
                 }
                 return {Kind: "Baseword",SubKind: "Keyword",Symbol: _a,Target: _b} as Keyword;
+            }break;
+            case TokenType.SEMICOLON:{
+                return {Kind: "Baseword", SubKind: "Word",Symbol: this.eat()} as Word;
             }break;
             case TokenType.NUMBER:{
                 return {Kind: "NumericLiteral",SubKind:"None",Value: parseFloat(this.eat().Value)} as NumericLiteral;

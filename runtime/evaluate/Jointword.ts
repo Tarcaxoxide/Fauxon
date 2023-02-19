@@ -12,6 +12,7 @@ export function evaluate_Jointword(word: Jointword ,env: Enviroment): RunTimeVal
     }
     const VarName = word.SecondSymbol.Value;
     const Tenv = Enviroment.Find(EnvName);
+    console.log
     if(Tenv == undefined)return MAKE_NULL();
 	return Tenv.LookupVariable(VarName);
 }
