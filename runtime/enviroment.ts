@@ -10,11 +10,6 @@ export default class Enviroment{
 		this.ID=nID;
 		this.Parent=ParentEnv
 		this.Variables = new Map()
-		//if(this.Parent != undefined)console.log(`Enviroment ${this.Here()} created.`)
-		this.SetVariable("TRUE",MAKE_BOOL(true));
-		this.SetVariable("FALSE",MAKE_BOOL(false));
-		this.SetVariable("NULL",MAKE_NULL());
-		//define native function (will be removed later anyways in favor of user defined functions)
 	}
 	public DeclareVariable(varname: string, varvalue: RunTimeValue): RunTimeValue{
 		if(this.Variables.has(varname)){
@@ -73,6 +68,5 @@ export default class Enviroment{
 		if(this.ALL == undefined)this.ALL = new Map();
 		if(!this.ALL.has(oID))return;
 		this.ALL.delete(oID);
-		//console.log(`Enviroment ${oID} deleted.`)
 	}
 }

@@ -1,12 +1,9 @@
-import { KEYWORDS } from "../runtime/evaluate/Keyword.ts"
-
 export enum TokenType{
 	NULL
 	,NUMBER
 	,IDENTIFIER
 	,EQUALS
 	,WORD
-	,KEYWORD
 	,PLUS
 	,MINUS
 	,MULTIPLY
@@ -64,7 +61,6 @@ export function TypeToString(Type:TokenType): string{
 		case TokenType.IDENTIFIER:{result="IDENTIFIER";}break;
 		case TokenType.EQUALS:{result="EQUALS";}break;
 		case TokenType.WORD:{result="WORD";}break;
-		case TokenType.KEYWORD:{result="KEYWORD";}break;
 		case TokenType.PLUS:{result="PLUS";}break;
 		case TokenType.MINUS:{result="MINUS";}break;
 		case TokenType.MULTIPLY:{result="MULTIPLY";}break;
@@ -108,16 +104,6 @@ export function IsIn(Ta:string, Ar:string): boolean{
 	}
 	return false;
 }
-
-export function IsInKeywords(Ta:string): boolean{
-	for (const z of KEYWORDS){
-		if(z == Ta)return true;
-		
-	}
-	return false;
-}
-
-
 export function tokenize (sourceCode: string): Token[]{
 	const tokens = new Array<Token>();
 	const zourceCode = sourceCode+'';
@@ -289,9 +275,6 @@ export function tokenize (sourceCode: string): Token[]{
 					tokens.push(token(word_str,TokenType.WORD));
 				}else{
 					tokens.push(token("Unknown Character:"+src.shift()+"",TokenType.ERROR));
-				}
-				if(tokens[tokens.length-1].Type == TokenType.WORD && IsInKeywords(tokens[tokens.length-1].Value)){
-					tokens[tokens.length-1].Type=TokenType.KEYWORD;
 				}
 			}break;
 		}

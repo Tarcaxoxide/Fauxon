@@ -1,12 +1,11 @@
 // deno-lint-ignore-file no-unreachable
-import { RunTimeValue, MAKE_NULL, _MAKE_BOOL, NumberValue, NativeFuncionValue } from "./values.ts"
+import { RunTimeValue, MAKE_NULL, _MAKE_BOOL, NumberValue, NativeFuncionValue, MAKE_BOOL } from "./values.ts"
 import {   Word, Keyword, BinaryExpression, Program, Statement, NumericLiteral, VariableDeclaration, ObjectLiteral, Jointword, CallExpression, UnaryExpression, MemberExpression } from "../frontend/ast.ts"
 import Enviroment from "./enviroment.ts"
 import { evaluate_BinaryExpression } from "./evaluate/BinaryExpression.ts";
 import { evaluate_Program } from "./evaluate/Program.ts";
 import { evaluate_VariableDeclaration } from "./evaluate/VariableDeclaration.ts";
 import { evaluate_Word } from "./evaluate/Word.ts";
-import { evaluate_Keyword, evaluate_SubKeyword } from "./evaluate/Keyword.ts";
 import { evaluate_Jointword } from "./evaluate/Jointword.ts";
 import { evaluate_ObjectExpression } from "./evaluate/ObjectExpression.ts";
 import { evaluate_CallExpression } from "./evaluate/CallExpression.ts";
@@ -35,6 +34,9 @@ export function evaluate(astNode: Statement,env?: Enviroment): RunTimeValue{
 		const nEnv=new Enviroment("Root");
 		Enviroment.Add(nEnv);
 		NowHere(nEnv);
+		nEnv.SetVariable("TRUE",MAKE_BOOL(true));
+		nEnv.SetVariable("FALSE",MAKE_BOOL(false));
+		nEnv.SetVariable("NULL",MAKE_NULL());
 	}
 	switch(astNode.Kind){
 		case "Program":{
@@ -54,13 +56,7 @@ export function evaluate(astNode: Statement,env?: Enviroment): RunTimeValue{
 				case "Word":{
 					return evaluate_Word((astNode as Word),Env);
 				}
-				case "Keyword":{
-					return evaluate_Keyword((astNode as Keyword),Env);
-				}
 				case "Jointword":{
-					if(astNode.Symbol.SubKind == "Keyword"){
-						return evaluate_SubKeyword((astNode as Jointword),Env);
-					}
 					return evaluate_Jointword((astNode as Jointword),Env);
 				}
 				default:{
