@@ -55,6 +55,10 @@ namespace Fauxon{
             Number=tmp;
         }
         void WholeNumberValue::Subtract(std::string number){
+            if(number[0] != oSign && number[0] != Sign && Sign == '-'){
+                Add(number);
+                return;
+            }
             if(number[0] == oSign){
                 number.erase(0,1);
                 Add(number);
@@ -87,7 +91,7 @@ namespace Fauxon{
                 WholeNumberValue T(number);
                 T.Subtract(Number);
                 tmp=T.Number;
-                if(Sign == '-'){Sign='+';oSign='-';}else{Sign='-';oSign='+';}
+                FlipSign();
             }else{
                 std::reverse(tmp.begin(),tmp.end());
             }
@@ -113,6 +117,9 @@ namespace Fauxon{
                 Result.Add(Number);
             }
             Number=Result.Number;
+        }
+        void WholeNumberValue::FlipSign(){
+            if(Sign == '-'){Sign='+';oSign='-';}else{Sign='-';oSign='+';}
         }
         //Comparision operators
         bool WholeNumberValue::operator<(std::string number){//205<300

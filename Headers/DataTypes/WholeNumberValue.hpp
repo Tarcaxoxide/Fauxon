@@ -24,6 +24,7 @@ namespace Fauxon{
             void Subtract(std::string number);inline void Subtract(WholeNumberValue number){Subtract(number.ToString());}
             void Multiply(std::string number);inline void Multiply(WholeNumberValue number){Multiply(number.ToString());}
             void Divide(std::string number);inline void Divide(WholeNumberValue number){Divide(number.ToString());}
+            void FlipSign();
             //Comparision operators
             bool operator<(std::string number);
             inline bool operator<(WholeNumberValue number){return (*this)<number.ToString();}

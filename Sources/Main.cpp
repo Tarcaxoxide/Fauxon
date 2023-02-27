@@ -22,6 +22,11 @@ int main(int c,char** v){
     /*test*/if(TestNumber>5.5)std::cout<<"more than 5.5"<<std::endl;
     /*test*/if(TestNumber>6.7)std::cout<<"more than 6.7"<<std::endl;
 
+    /*test*/TestNumber+=10.5;
+    /*test*/std::cout<<TestNumber.ToString()<<std::endl;
+    /*test*/TestNumber-=10.4;
+    /*test*/std::cout<<TestNumber.ToString()<<std::endl;
+
     /*test*/return 0;
     if(c == 2){
         std::ifstream file(v[1]);

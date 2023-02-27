@@ -7,6 +7,7 @@ namespace Fauxon{
         struct DecimalNumberValue{
             Fauxon::DataTypes::WholeNumberValue WholeNumber;
             Fauxon::DataTypes::WholeNumberValue DecimalNumber;
+            size_t DecimalPlaces=0;
             //constructors!, constructors!, constructors!, construct!
             DecimalNumberValue(long double number);
             DecimalNumberValue(std::string number);
