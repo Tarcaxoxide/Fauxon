@@ -2,34 +2,26 @@
 #include<string>
 #include<fstream>
 
-/*test*/#include<DataTypes/NumberValue.hpp>
+/*test*/#include<DataTypes/DecimalNumberValue.hpp>
 int main(int c,char** v){
-    /*test*/Fauxon::DataTypes::NumberValue TestNumber("100");
+    /*test*/Fauxon::DataTypes::DecimalNumberValue TestNumber(6.5);
 
     /*test*/std::cout<<TestNumber.ToString()<<std::endl;
 
-    /*test*/TestNumber*=4;
+    /*test*/if(TestNumber<6.5)std::cout<<"less than 6.5"<<std::endl;
+    /*test*/if(TestNumber<5.6)std::cout<<"less than 5.6"<<std::endl;
+    /*test*/if(TestNumber<7.5)std::cout<<"less than 7.6"<<std::endl;
+    /*test*/if(TestNumber<5.5)std::cout<<"less than 5.5"<<std::endl;
+    /*test*/if(TestNumber<6.7)std::cout<<"less than 6.7"<<std::endl;
 
-    /*test*/if(TestNumber > 100)std::cout<<"bigger than 100"<<std::endl;
-    /*test*/if(TestNumber > 200)std::cout<<"bigger than 200"<<std::endl;
-    /*test*/if(TestNumber > 300)std::cout<<"bigger than 300"<<std::endl;
-    /*test*/if(TestNumber > 400)std::cout<<"bigger than 400"<<std::endl;
-    /*test*/if(TestNumber > 500)std::cout<<"bigger than 500"<<std::endl;
-    /*test*/if(TestNumber > 600)std::cout<<"bigger than 600"<<std::endl;
-    /*test*/if(TestNumber == 100)std::cout<<"equal to 100"<<std::endl;
-    /*test*/if(TestNumber == 200)std::cout<<"equal to 200"<<std::endl;
-    /*test*/if(TestNumber == 300)std::cout<<"equal to 300"<<std::endl;
-    /*test*/if(TestNumber == 400)std::cout<<"equal to 400"<<std::endl;
-    /*test*/if(TestNumber == 500)std::cout<<"equal to 500"<<std::endl;
-    /*test*/if(TestNumber == 600)std::cout<<"equal to 600"<<std::endl;
-    /*test*/if(TestNumber < 100)std::cout<<"lesser than 100"<<std::endl;
-    /*test*/if(TestNumber < 200)std::cout<<"lesser than 200"<<std::endl;
-    /*test*/if(TestNumber < 300)std::cout<<"lesser than 300"<<std::endl;
-    /*test*/if(TestNumber < 400)std::cout<<"lesser than 400"<<std::endl;
-    /*test*/if(TestNumber < 500)std::cout<<"lesser than 500"<<std::endl;
-    /*test*/if(TestNumber < 600)std::cout<<"lesser than 600"<<std::endl;
+    /*test*/if(TestNumber==6.5)std::cout<<"is 6.5"<<std::endl;
 
-    /*test*/std::cout<<TestNumber.ToString()<<std::endl;
+    /*test*/if(TestNumber>6.5)std::cout<<"more than 6.5"<<std::endl;
+    /*test*/if(TestNumber>5.6)std::cout<<"more than 5.6"<<std::endl;
+    /*test*/if(TestNumber>7.5)std::cout<<"more than 7.6"<<std::endl;
+    /*test*/if(TestNumber>5.5)std::cout<<"more than 5.5"<<std::endl;
+    /*test*/if(TestNumber>6.7)std::cout<<"more than 6.7"<<std::endl;
+    
 
     /*test*/return 0;
     if(c == 2){

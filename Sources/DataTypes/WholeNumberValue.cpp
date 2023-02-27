@@ -1,27 +1,27 @@
-#include<DataTypes/NumberValue.hpp>
+#include<DataTypes/WholeNumberValue.hpp>
 
 namespace Fauxon{
     namespace DataTypes{
         //constructors!, constructors!, constructors!, construct!
-        NumberValue::NumberValue(int64_t number){
+        WholeNumberValue::WholeNumberValue(int64_t number){
             std::string xNumber = std::to_string(number);
             Add(xNumber);
         }
-        NumberValue::NumberValue(std::string number){
+        WholeNumberValue::WholeNumberValue(std::string number){
             Add(number);
         }
-        NumberValue::NumberValue(const NumberValue& number){
+        WholeNumberValue::WholeNumberValue(const WholeNumberValue& number){
             Add(number);
         }
         //To string for printing the number out (shshsh... it's already a string XD)
-        std::string NumberValue::ToString(){
+        std::string WholeNumberValue::ToString(){
             std::string Result="";
             Result+=Sign;
             Result+=Number;
             return Result;
         }
         //Base math function
-        void NumberValue::Add(std::string number){
+        void WholeNumberValue::Add(std::string number){
             if(number[0] == oSign){
                 number.erase(0,1);
                 Subtract(number);
@@ -54,7 +54,7 @@ namespace Fauxon{
             std::reverse(tmp.begin(),tmp.end());
             Number=tmp;
         }
-        void NumberValue::Subtract(std::string number){
+        void WholeNumberValue::Subtract(std::string number){
             if(number[0] == oSign){
                 number.erase(0,1);
                 Add(number);
@@ -84,7 +84,7 @@ namespace Fauxon{
             if(Carry!=0){
                 std::reverse(number.begin(),number.end());
                 std::reverse(tmp.begin(),tmp.end());
-                NumberValue T(number);
+                WholeNumberValue T(number);
                 T.Subtract(Number);
                 tmp=T.Number;
                 if(Sign == '-'){Sign='+';oSign='-';}else{Sign='-';oSign='+';}
@@ -94,25 +94,29 @@ namespace Fauxon{
             Number=tmp;
             while(Number[0] == '0'&&Number.size()>1)Number.erase(0,1);
         }
-        void NumberValue::Divide(std::string number){
-            NumberValue Counter("0");
-            NumberValue Result(Number);
+        void WholeNumberValue::Divide(std::string number){
+            WholeNumberValue Counter("0");
+            if((*this)<number){
+                Number="0";
+                return;
+            }
+            WholeNumberValue Result(Number);
             for(;Result>0;Counter.Add("1")){
                 Result.Subtract(number);
             }
             Number=Counter.Number;
         }
-        void NumberValue::Multiply(std::string number){
-            NumberValue Counter(number);
-            NumberValue Result("0");
+        void WholeNumberValue::Multiply(std::string number){
+            WholeNumberValue Counter(number);
+            WholeNumberValue Result("0");
             for(;Counter>0;Counter.Subtract("1")){
                 Result.Add(Number);
             }
             Number=Result.Number;
         }
         //Comparision operators
-        bool NumberValue::operator<(std::string number){//205<300
-            NumberValue Vnumber(number);
+        bool WholeNumberValue::operator<(std::string number){//205<300
+            WholeNumberValue Vnumber(number);
             switch(Sign){
                 case '+':{
                     switch(Vnumber.Sign){
@@ -159,8 +163,8 @@ namespace Fauxon{
             }
             return false;
         }
-        bool NumberValue::operator>(std::string number){
-            NumberValue Vnumber(number);
+        bool WholeNumberValue::operator>(std::string number){
+            WholeNumberValue Vnumber(number);
             switch(Sign){
                 case '+':{
                     switch(Vnumber.Sign){
@@ -207,17 +211,17 @@ namespace Fauxon{
             }
             return false;
         }
-        bool NumberValue::operator<=(std::string number){
+        bool WholeNumberValue::operator<=(std::string number){
             if((*this)<number)return true;
             if((*this)==number)return true;
             return false;
         }
-        bool NumberValue::operator>=(std::string number){
+        bool WholeNumberValue::operator>=(std::string number){
             if((*this)>number)return true;
             if((*this)==number)return true;
             return false;
         }
-        bool NumberValue::operator==(std::string number){
+        bool WholeNumberValue::operator==(std::string number){
             if(Number.size() < number.size())return false;
             if(Number.size() > number.size())return false;
             for(int64_t i=number.size()-1;i>=0;i--){
@@ -225,14 +229,14 @@ namespace Fauxon{
             }
             return true;
         }
-        bool NumberValue::operator!=(std::string number){
+        bool WholeNumberValue::operator!=(std::string number){
             return !((*this)==number);
         }
         //Math operator
-        NumberValue& NumberValue::operator+=(std::string number){Add(number);return *this;}
-        NumberValue& NumberValue::operator-=(std::string number){Subtract(number);return *this;}
-        NumberValue& NumberValue::operator*=(std::string number){Multiply(number);return *this;}
-        NumberValue& NumberValue::operator/=(std::string number){Divide(number);return *this;}
-        NumberValue& NumberValue::operator=(std::string number){Number.clear();Add(number);return *this;}
+        WholeNumberValue& WholeNumberValue::operator+=(std::string number){Add(number);return *this;}
+        WholeNumberValue& WholeNumberValue::operator-=(std::string number){Subtract(number);return *this;}
+        WholeNumberValue& WholeNumberValue::operator*=(std::string number){Multiply(number);return *this;}
+        WholeNumberValue& WholeNumberValue::operator/=(std::string number){Divide(number);return *this;}
+        WholeNumberValue& WholeNumberValue::operator=(std::string number){Number.clear();Add(number);return *this;}
     };
 };
