@@ -2,7 +2,7 @@
 
 namespace Fauxon{
     namespace DataTypes{
-        //
+        //constructors!, constructors!, constructors!, construct!
         NumberValue::NumberValue(int64_t number){
             std::string xNumber = std::to_string(number);
             Add(xNumber);
@@ -13,14 +13,14 @@ namespace Fauxon{
         NumberValue::NumberValue(const NumberValue& number){
             Add(number);
         }
-        //
+        //To string for printing the number out (shshsh... it's already a string XD)
         std::string NumberValue::ToString(){
             std::string Result="";
             Result+=Sign;
             Result+=Number;
             return Result;
         }
-        //
+        //Base math function
         void NumberValue::Add(std::string number){
             if(number[0] == oSign){
                 number.erase(0,1);
@@ -97,7 +97,7 @@ namespace Fauxon{
         void NumberValue::Divide(std::string number){
             NumberValue Counter("0");
             NumberValue Result(Number);
-            for(;Result>"0";Counter.Add("1")){
+            for(;Result>0;Counter.Add("1")){
                 Result.Subtract(number);
             }
             Number=Counter.Number;
@@ -105,12 +105,12 @@ namespace Fauxon{
         void NumberValue::Multiply(std::string number){
             NumberValue Counter(number);
             NumberValue Result("0");
-            for(;Counter>"0";Counter.Subtract("1")){
+            for(;Counter>0;Counter.Subtract("1")){
                 Result.Add(Number);
             }
             Number=Result.Number;
         }
-        //
+        //Comparision operators
         bool NumberValue::operator<(std::string number){//205<300
             NumberValue Vnumber(number);
             switch(Sign){
@@ -228,5 +228,11 @@ namespace Fauxon{
         bool NumberValue::operator!=(std::string number){
             return !((*this)==number);
         }
+        //Math operator
+        NumberValue& NumberValue::operator+=(std::string number){Add(number);return *this;}
+        NumberValue& NumberValue::operator-=(std::string number){Subtract(number);return *this;}
+        NumberValue& NumberValue::operator*=(std::string number){Multiply(number);return *this;}
+        NumberValue& NumberValue::operator/=(std::string number){Divide(number);return *this;}
+        NumberValue& NumberValue::operator=(std::string number){Number.clear();Add(number);return *this;}
     };
 };
