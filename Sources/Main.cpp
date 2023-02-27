@@ -24,7 +24,7 @@ int main(int c,char** v){
 
     /*test*/TestNumber+=10.5;
     /*test*/std::cout<<TestNumber.ToString()<<std::endl;
-    /*test*/TestNumber-=10.4;
+    /*test*/TestNumber-=10.2;
     /*test*/std::cout<<TestNumber.ToString()<<std::endl;
 
     /*test*/return 0;
