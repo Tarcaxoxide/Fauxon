@@ -4,11 +4,11 @@
 
 /*test*/#include<DataTypes/NumberValue.hpp>
 int main(int c,char** v){
-    /*test*/Fauxon::DataTypes::NumberValue TestNumber("999999");
+    /*test*/Fauxon::DataTypes::NumberValue TestNumber("100");
 
     /*test*/std::cout<<TestNumber.ToString()<<std::endl;
 
-    /*test*/TestNumber.Add("1");
+    /*test*/TestNumber.Subtract("600");
 
     /*test*/std::cout<<TestNumber.ToString()<<std::endl;
 
