@@ -4,11 +4,11 @@
 
 /*test*/#include<DataTypes/NumberValue.hpp>
 int main(int c,char** v){
-    /*test*/Fauxon::DataTypes::NumberValue TestNumber("500");
+    /*test*/Fauxon::DataTypes::NumberValue TestNumber("100");
 
     /*test*/std::cout<<TestNumber.ToString()<<std::endl;
 
-    /*test*/TestNumber.Divide("5");
+    /*test*/TestNumber.Multiply("5");
 
     /*test*/if(TestNumber > "100")std::cout<<"bigger than 100"<<std::endl;
     /*test*/if(TestNumber > "200")std::cout<<"bigger than 200"<<std::endl;

@@ -97,7 +97,7 @@ namespace Fauxon{
         void NumberValue::Divide(std::string number){
             NumberValue Counter("0");
             NumberValue Result(Number);
-            for(;!(Result=="0"||Result<"0");Counter.Add("1")){
+            for(;Result>"0";Counter.Add("1")){
                 Result.Subtract(number);
             }
             Number=Counter.Number;
@@ -105,7 +105,7 @@ namespace Fauxon{
         void NumberValue::Multiply(std::string number){
             NumberValue Counter(number);
             NumberValue Result("0");
-            for(;Counter!="0";Counter.Subtract("1")){
+            for(;Counter>"0";Counter.Subtract("1")){
                 Result.Add(Number);
             }
             Number=Result.Number;
@@ -190,7 +190,7 @@ namespace Fauxon{
                     case '+':{
                         switch(Vnumber.Sign){
                             case '+':{
-                                if(Number[i] < Vnumber.Number[i])return false;
+                                if(Number[i] > Vnumber.Number[i])return true;
                             }break;
                             //case '-':{}break;
                         }
@@ -199,13 +199,13 @@ namespace Fauxon{
                         switch(Vnumber.Sign){
                             //case '+':{}break;
                             case '-':{
-                                if(Number[i] > Vnumber.Number[i])return false;
+                                if(Number[i] < Vnumber.Number[i])return true;
                             }break;
                         }
                     }break;
                 }
             }
-            return true;
+            return false;
         }
         bool NumberValue::operator<=(std::string number){
             if((*this)<number)return true;
