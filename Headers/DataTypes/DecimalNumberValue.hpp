@@ -50,6 +50,27 @@ namespace Fauxon{
             inline bool operator!=(WholeNumberValue number){return (*this)!=number.ToString();}
             inline bool operator!=(DecimalNumberValue number){return (*this)!=number.ToString();}
             inline bool operator!=(long double number){return (*this)!=std::to_string(number);}
+            //Math operator
+            DecimalNumberValue& operator+=(std::string number);
+            inline DecimalNumberValue& operator+=(WholeNumberValue number){return (*this)+=number.ToString();}
+            inline DecimalNumberValue& operator+=(DecimalNumberValue number){return (*this)+=number.ToString();}
+            inline DecimalNumberValue& operator+=(long double number){return (*this)+=std::to_string(number);}
+            DecimalNumberValue& operator-=(std::string number);
+            inline DecimalNumberValue& operator-=(WholeNumberValue number){return (*this)-=number.ToString();}
+            inline DecimalNumberValue& operator-=(DecimalNumberValue number){return (*this)-=number.ToString();}
+            inline DecimalNumberValue& operator-=(long double number){return (*this)-=std::to_string(number);}
+            DecimalNumberValue& operator*=(std::string number);
+            inline DecimalNumberValue& operator*=(WholeNumberValue number){return (*this)*=number.ToString();}
+            inline DecimalNumberValue& operator*=(DecimalNumberValue number){return (*this)*=number.ToString();}
+            inline DecimalNumberValue& operator*=(long double number){return (*this)*=std::to_string(number);}
+            DecimalNumberValue& operator/=(std::string number);
+            inline DecimalNumberValue& operator/=(WholeNumberValue number){return (*this)/=number.ToString();}
+            inline DecimalNumberValue& operator/=(DecimalNumberValue number){return (*this)/=number.ToString();}
+            inline DecimalNumberValue& operator/=(long double number){return (*this)/=std::to_string(number);}
+            DecimalNumberValue& operator=(std::string number);
+            inline DecimalNumberValue& operator=(WholeNumberValue number){return (*this)=number.ToString();}
+            inline DecimalNumberValue& operator=(DecimalNumberValue number){return (*this)=number.ToString();}
+            inline DecimalNumberValue& operator=(long double number){return (*this)=std::to_string(number);}
         };
     };
 };

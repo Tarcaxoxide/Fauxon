@@ -21,7 +21,6 @@ int main(int c,char** v){
     /*test*/if(TestNumber>7.5)std::cout<<"more than 7.6"<<std::endl;
     /*test*/if(TestNumber>5.5)std::cout<<"more than 5.5"<<std::endl;
     /*test*/if(TestNumber>6.7)std::cout<<"more than 6.7"<<std::endl;
-    
 
     /*test*/return 0;
     if(c == 2){

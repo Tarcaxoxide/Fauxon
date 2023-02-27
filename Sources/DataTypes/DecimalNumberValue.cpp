@@ -89,5 +89,67 @@ namespace Fauxon{
         bool DecimalNumberValue::operator!=(std::string number){
             return (!((*this)==number));
         }
+        //Math operator
+            DecimalNumberValue& DecimalNumberValue::operator+=(std::string number){
+                std::stringstream input_stringstream(number);
+                std::deque<std::string> parts;
+                std::string parsed;
+                while (std::getline(input_stringstream,parsed,'.')){
+                    parts.push_back(parsed);
+                }
+                if(parts.size() == 0)parts.push_back("0");
+                if(parts.size() == 1)parts.push_back("0");
+                Add(parts[0],parts[1]);
+                return *this;
+            }
+            DecimalNumberValue& DecimalNumberValue::operator-=(std::string number){
+                std::stringstream input_stringstream(number);
+                std::deque<std::string> parts;
+                std::string parsed;
+                while (std::getline(input_stringstream,parsed,'.')){
+                    parts.push_back(parsed);
+                }
+                if(parts.size() == 0)parts.push_back("0");
+                if(parts.size() == 1)parts.push_back("0");
+                Subtract(parts[0],parts[1]);
+                return *this;
+            }
+            DecimalNumberValue& DecimalNumberValue::operator*=(std::string number){
+                std::stringstream input_stringstream(number);
+                std::deque<std::string> parts;
+                std::string parsed;
+                while (std::getline(input_stringstream,parsed,'.')){
+                    parts.push_back(parsed);
+                }
+                if(parts.size() == 0)parts.push_back("0");
+                if(parts.size() == 1)parts.push_back("0");
+                Multiply(parts[0],parts[1]);
+                return *this;
+            }
+            DecimalNumberValue& DecimalNumberValue::operator/=(std::string number){
+                std::stringstream input_stringstream(number);
+                std::deque<std::string> parts;
+                std::string parsed;
+                while (std::getline(input_stringstream,parsed,'.')){
+                    parts.push_back(parsed);
+                }
+                if(parts.size() == 0)parts.push_back("0");
+                if(parts.size() == 1)parts.push_back("0");
+                Divide(parts[0],parts[1]);
+                return *this;
+            }
+            DecimalNumberValue& DecimalNumberValue::operator=(std::string number){
+                std::stringstream input_stringstream(number);
+                std::deque<std::string> parts;
+                std::string parsed;
+                while (std::getline(input_stringstream,parsed,'.')){
+                    parts.push_back(parsed);
+                }
+                if(parts.size() == 0)parts.push_back("0");
+                if(parts.size() == 1)parts.push_back("0");
+                WholeNumber=parts[0];
+                DecimalNumber=parts[1];
+                return *this;
+            }
     };
 };
