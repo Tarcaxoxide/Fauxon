@@ -16,14 +16,13 @@ int main(int c,char** v){
     std::cout<<":>";
         for(std::string Line;std::getline(std::cin,Line);){
             if(!Line.size())break;
-            Fauxon::Lexer::Lex(Line);
-            Fauxon::DataTypes::Token* CToken = Fauxon::Lexer::NextToken();
-            while((*CToken).Kind != Fauxon::DataTypes::Kinds::Kinds::Eof){
-                std::cout<<"<:"<<(*CToken).ToString()<<std::endl;
-                delete CToken;
-                CToken = Fauxon::Lexer::NextToken();
+            std::deque<Fauxon::DataTypes::Token> Tokens=Fauxon::Lexer::Lex(Line);
+
+            for(size_t i=0;i<Tokens.size();i++){
+                std::cout<<"<:"<<Tokens[i].ToString()<<std::endl;
             }
-            delete CToken;
+
+            
             std::cout<<":>";
         }
     }

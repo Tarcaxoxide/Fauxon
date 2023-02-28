@@ -8,9 +8,20 @@ namespace Fauxon{
     namespace Lexer{
         std::string SourceCode;
         size_t Position;
-        void Lex(std::string srcCode){
+        void Init(std::string srcCode){
             SourceCode=srcCode;
             Position=0;
+        }
+        std::deque<DataTypes::Token> Lex(std::string srcCode){
+            std::deque<DataTypes::Token> Result;
+            Init(srcCode);
+            Fauxon::DataTypes::Token CToken = Fauxon::Lexer::NextToken();
+            while(CToken.Kind != Fauxon::DataTypes::Kinds::Kinds::Eof){
+                Result.push_back(CToken);
+                CToken = Fauxon::Lexer::NextToken();
+            }
+            Result.push_back(CToken);
+            return Result;
         }
         /* \/private\/ */
         char Current(){
@@ -21,9 +32,9 @@ namespace Fauxon{
             Position++;
         }
         /* /\private/\ */
-        DataTypes::Token* NextToken(){
+        DataTypes::Token NextToken(){
             while(IsWhiteSpace(Current()))Advance();
-            if(Current() == '\0')return new Fauxon::DataTypes::Token(DataTypes::Kinds::Kinds::Eof,(size_t[2]){Position,Position+1},"Eof");
+            if(Current() == '\0')return Fauxon::DataTypes::Token(DataTypes::Kinds::Kinds::Eof,(size_t[2]){Position,Position+1},"Eof");
             if(IsDigit(Current())||Current()=='+'||Current()=='-'){
                 size_t start = Position;
                 if(Current()=='+'||Current()=='-')Advance();
@@ -34,24 +45,24 @@ namespace Fauxon{
                 
                 Fauxon::DataTypes::DecimalNumberValue X;
                 if(!Fauxon::DataTypes::DecimalNumberValue::TryParse(text,X)){
-                    return new Fauxon::DataTypes::Token(DataTypes::Kinds::Kinds::Null,(size_t[2]){Position,++Position},"Null");
+                    return Fauxon::DataTypes::Token(DataTypes::Kinds::Kinds::Null,(size_t[2]){Position,++Position},"Null");
                 }
-                return new Fauxon::DataTypes::Token(DataTypes::Kinds::Kinds::NumberToken,(size_t[2]){start,start+end},text,X);
+                return Fauxon::DataTypes::Token(DataTypes::Kinds::Kinds::NumberToken,(size_t[2]){start,start+end},text,X);
             }
             if(IsLetter(Current())){
                 size_t start = Position;
                 while(IsLetter(Current())||Current()=='_'||IsDigit(Current()))Advance();
                 size_t end=Position-start;
                 std::string text = SourceCode.substr(start,end);
-                return new Fauxon::DataTypes::Token(DataTypes::Kinds::Kinds::WordToken,(size_t[2]){start,start+end},text);
+                return Fauxon::DataTypes::Token(DataTypes::Kinds::Kinds::WordToken,(size_t[2]){start,start+end},text);
             }
             switch(Current()){
-                case '+':return new Fauxon::DataTypes::Token(DataTypes::Kinds::Kinds::PlusToken,(size_t[2]){Position,++Position},"+");
-                case '-':return new Fauxon::DataTypes::Token(DataTypes::Kinds::Kinds::MinusToken,(size_t[2]){Position,++Position},"-");
-                case '*':return new Fauxon::DataTypes::Token(DataTypes::Kinds::Kinds::AstrixToken,(size_t[2]){Position,++Position},"*");
-                case '/':return new Fauxon::DataTypes::Token(DataTypes::Kinds::Kinds::ForwardSlashToken,(size_t[2]){Position,++Position},"/");
+                case '+':return Fauxon::DataTypes::Token(DataTypes::Kinds::Kinds::PlusToken,(size_t[2]){Position,++Position},"+");
+                case '-':return Fauxon::DataTypes::Token(DataTypes::Kinds::Kinds::MinusToken,(size_t[2]){Position,++Position},"-");
+                case '*':return Fauxon::DataTypes::Token(DataTypes::Kinds::Kinds::AstrixToken,(size_t[2]){Position,++Position},"*");
+                case '/':return Fauxon::DataTypes::Token(DataTypes::Kinds::Kinds::ForwardSlashToken,(size_t[2]){Position,++Position},"/");
             }
-            return new Fauxon::DataTypes::Token(DataTypes::Kinds::Kinds::Null,(size_t[2]){Position,++Position},"Null");
+            return Fauxon::DataTypes::Token(DataTypes::Kinds::Kinds::Null,(size_t[2]){Position,++Position},"Null");
         }
     };
 };

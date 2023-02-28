@@ -2,8 +2,12 @@
 
 namespace Fauxon{
     namespace DataTypes{
-        Token::Token(const Token& t):Value(t.Value){
-            Kind=t.Kind;
+        Token::Token(const Token& T){
+            Kind=T.Kind;
+            Text=T.Text;
+            StartPosition=T.StartPosition;
+            EndPosition=T.EndPosition;
+            Value=T.Value;
         }
         Token::Token(DataTypes::Kinds::Kinds kind,size_t position[2],std::string text){
             Kind=kind;
@@ -26,7 +30,7 @@ namespace Fauxon{
             Result+="Text:`";
             Result+=Text;
             Result+="`,";
-            if(Value!="0.0"){
+            if(Value!="+0.000000"){
                 Result+="Value:`";
                 Result+=Value.ToString();
                 Result+="`,";

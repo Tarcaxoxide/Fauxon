@@ -11,7 +11,7 @@ namespace Fauxon{
             Fauxon::DataTypes::DecimalNumberValue Value;
             size_t StartPosition;
             size_t EndPosition;
-            Token(const Token& t);
+            Token(const Token& T);
             Token(DataTypes::Kinds::Kinds kind,size_t position[2],std::string text);
             Token(DataTypes::Kinds::Kinds kind,size_t position[2],std::string text,const Fauxon::DataTypes::DecimalNumberValue& value);
             std::string ToString();
