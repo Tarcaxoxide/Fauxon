@@ -5,6 +5,7 @@ namespace Fauxon{
     namespace DataTypes{
         //constructors!, constructors!, constructors!, construct!
         DecimalNumberValue::DecimalNumberValue(long double number):WholeNumber("0"),DecimalNumber("0"){
+            //if(number<0){WholeNumber.FlipSign();number=-number;}
             std::string Xnumber = std::to_string(number);
             std::stringstream input_stringstream(Xnumber);
             std::deque<std::string> parts;
@@ -19,10 +20,15 @@ namespace Fauxon{
             DecimalPlaces=DecimalNumber.Number.size();
         }
         DecimalNumberValue::DecimalNumberValue(std::string number):WholeNumber("0"),DecimalNumber("0"){
+            //if(number[0]=='-'){WholeNumber.FlipSign();number.erase(0,1);}
+            //if(number[0]=='+')number.erase(0,1);
             WholeNumber=number;
             DecimalPlaces=DecimalNumber.Number.size();
         }
         DecimalNumberValue::DecimalNumberValue(std::string wholeNumber,std::string decimalNumber):WholeNumber("0"),DecimalNumber("0"){
+            //if(wholeNumber[0]=='-'){WholeNumber.FlipSign();wholeNumber.erase(0,1);}
+            //if(wholeNumber[0]=='+')wholeNumber.erase(0,1);
+            //if(decimalNumber[0]=='-'||decimalNumber[0]=='+')decimalNumber.erase(0,1);
             WholeNumber=wholeNumber;
             DecimalNumber=decimalNumber;
             DecimalPlaces=DecimalNumber.Number.size();

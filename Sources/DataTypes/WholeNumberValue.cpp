@@ -22,12 +22,23 @@ namespace Fauxon{
         }
         //Base math function
         void WholeNumberValue::Add(std::string number){
-            if(number[0] == oSign){
-                number.erase(0,1);
-                Subtract(number);
-                return;
-            }else if(number[0] == Sign){
-                number.erase(0,1);
+            switch(Sign){
+                case '-':{
+                    if(number[0]=='-'){
+                        if(number[0]=='-')number.erase(0,1);
+                        Subtract(number);
+                        return;
+                    }
+                    if(number[0]=='+')number.erase(0,1);
+                }break;
+                case '+':{
+                    if(number[0]=='-'){
+                        number.erase(0,1);
+                        Subtract(number);
+                        return;
+                    }
+                    if(number[0]=='+')number.erase(0,1);
+                }break;
             }
             std::string tmp=Number;
             std::reverse(tmp.begin(),tmp.end());
@@ -55,16 +66,23 @@ namespace Fauxon{
             Number=tmp;
         }
         void WholeNumberValue::Subtract(std::string number){
-            if(number[0] != oSign && number[0] != Sign && Sign == '-'){
-                Add(number);
-                return;
-            }
-            if(number[0] == oSign){
-                number.erase(0,1);
-                Add(number);
-                return;
-            }else if(number[0] == Sign){
-                number.erase(0,1);
+            switch(Sign){
+                case '-':{
+                    if(number[0]!='-'){
+                        //number.erase(0,1);
+                        Add(number);
+                        return;
+                    }
+                    if(number[0]=='-')number.erase(0,1);
+                }break;
+                case '+':{
+                    if(number[0]=='-'){
+                        number.erase(0,1);
+                        Add(number);
+                        return;
+                    }
+                    if(number[0]=='+')number.erase(0,1);
+                }break;
             }
             std::string tmp=Number;
             std::reverse(tmp.begin(),tmp.end());
@@ -74,7 +92,6 @@ namespace Fauxon{
             for(size_t i=0;i<number.size();i++){
                 if(i>=tmp.size())tmp+='0';
                 int X = std::stoi(tmp.substr(i,1))-std::stoi(number.substr(i,1))-Carry;
-                //std::cout<<"SUBTRACT?["<<i<<"]=("<<tmp.substr(i,1)<<"-"<<number.substr(i,1)<<"-"<<Carry<<")="<<X<<std::endl;
                 if(X<0){
                     X+=10;
                     Carry=1;
