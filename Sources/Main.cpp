@@ -5,9 +5,9 @@
 /*test*/#include<DataTypes/DecimalNumberValue.hpp>
 int main(int c,char** v){
     /*test*/
-    Fauxon::DataTypes::DecimalNumberValue TestNumber(6.0);
+    Fauxon::DataTypes::DecimalNumberValue TestNumber(6.7);
     std::cout<<TestNumber.ToString()<<std::endl;
-    TestNumber-=-6.0;
+    TestNumber+=6.7;
     std::cout<<TestNumber.ToString()<<std::endl;
     return 0;
     /*test*/
