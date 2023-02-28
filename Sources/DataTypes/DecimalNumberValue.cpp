@@ -55,7 +55,7 @@ namespace Fauxon{
         }
         //To string for printing the number out (shshsh... it's already a string XD)
         std::string DecimalNumberValue::ToString(){
-            return WholeNumber.ToString()+std::string(".")+DecimalNumber.ToString();
+            return WholeNumber.ToString()+std::string(".")+DecimalNumber.Number;
         }
         //Base math function
         void DecimalNumberValue::Add(std::string number){WholeNumber.Add(number);}
