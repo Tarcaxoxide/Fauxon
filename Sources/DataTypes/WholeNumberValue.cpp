@@ -64,6 +64,7 @@ namespace Fauxon{
             }
             std::reverse(tmp.begin(),tmp.end());
             Number=tmp;
+            Shrink();
         }
         void WholeNumberValue::Subtract(std::string number){
             switch(Sign){
@@ -113,7 +114,7 @@ namespace Fauxon{
                 std::reverse(tmp.begin(),tmp.end());
             }
             Number=tmp;
-            while(Number[0] == '0'&&Number.size()>1)Number.erase(0,1);
+            Shrink();
         }
         void WholeNumberValue::Divide(std::string number){
             WholeNumberValue Counter("0");
@@ -126,6 +127,7 @@ namespace Fauxon{
                 Result.Subtract(number);
             }
             Number=Counter.Number;
+            Shrink();
         }
         void WholeNumberValue::Multiply(std::string number){
             WholeNumberValue Counter(number);
@@ -134,9 +136,13 @@ namespace Fauxon{
                 Result.Add(Number);
             }
             Number=Result.Number;
+            Shrink();
         }
         void WholeNumberValue::FlipSign(){
             if(Sign == '-'){Sign='+';oSign='-';}else{Sign='-';oSign='+';}
+        }
+        void WholeNumberValue::Shrink(){
+            while(Number[0] == '0'&&Number.size()>1)Number.erase(0,1);
         }
         //Comparision operators
         bool WholeNumberValue::operator<(std::string number){//205<300

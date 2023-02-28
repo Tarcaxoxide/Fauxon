@@ -16,46 +16,47 @@ namespace Fauxon{
             if(parts.size() == 1)parts.push_back("0");
             WholeNumber=parts[0];
             DecimalNumber=parts[1];
-            DecimalPlaces=DecimalNumber.Number.size();
+            DecimalPlaces=DecimalNumber.Number.size()>=6?DecimalNumber.Number.size():6;
             DecimalNumber.Sign=WholeNumber.Sign;
             DecimalNumber.oSign=WholeNumber.oSign;
         }
         DecimalNumberValue::DecimalNumberValue(std::string number):WholeNumber("0"),DecimalNumber("0"){
             WholeNumber=number;
-            DecimalPlaces=DecimalNumber.Number.size();
+            DecimalPlaces=DecimalNumber.Number.size()>=6?DecimalNumber.Number.size():6;
             DecimalNumber.Sign=WholeNumber.Sign;
             DecimalNumber.oSign=WholeNumber.oSign;
         }
         DecimalNumberValue::DecimalNumberValue(std::string wholeNumber,std::string decimalNumber):WholeNumber("0"),DecimalNumber("0"){
             WholeNumber=wholeNumber;
             DecimalNumber=decimalNumber;
-            DecimalPlaces=DecimalNumber.Number.size();
+            DecimalPlaces=DecimalNumber.Number.size()>=6?DecimalNumber.Number.size():6;
             DecimalNumber.Sign=WholeNumber.Sign;
             DecimalNumber.oSign=WholeNumber.oSign;
         }
         DecimalNumberValue::DecimalNumberValue(const DecimalNumberValue& number):WholeNumber("0"),DecimalNumber("0"){
             WholeNumber=number.WholeNumber;
             DecimalNumber=number.DecimalNumber;
-            DecimalPlaces=DecimalNumber.Number.size();
+            DecimalPlaces=DecimalNumber.Number.size()>=6?DecimalNumber.Number.size():6;
             DecimalNumber.Sign=WholeNumber.Sign;
             DecimalNumber.oSign=WholeNumber.oSign;
         }
         DecimalNumberValue::DecimalNumberValue(const WholeNumberValue& number):WholeNumber("0"),DecimalNumber("0"){
             WholeNumber=number;
-            DecimalPlaces=DecimalNumber.Number.size();
+            DecimalPlaces=DecimalNumber.Number.size()>=6?DecimalNumber.Number.size():6;
             DecimalNumber.Sign=WholeNumber.Sign;
             DecimalNumber.oSign=WholeNumber.oSign;
         }
         DecimalNumberValue::DecimalNumberValue(const WholeNumberValue& wholeNumber,const WholeNumberValue& decimalNumber):WholeNumber("0"),DecimalNumber("0"){
             WholeNumber=wholeNumber;
             DecimalNumber=decimalNumber;
-            DecimalPlaces=DecimalNumber.Number.size();
+            DecimalPlaces=DecimalNumber.Number.size()>=6?DecimalNumber.Number.size():6;
             DecimalNumber.Sign=WholeNumber.Sign;
             DecimalNumber.oSign=WholeNumber.oSign;
         }
         //To string for printing the number out (shshsh... it's already a string XD)
         std::string DecimalNumberValue::ToString(){
-            return WholeNumber.ToString()+std::string(".")+DecimalNumber.Number;
+            if(DecimalNumber!=0)return WholeNumber.ToString()+std::string(".")+DecimalNumber.Number;
+            return WholeNumber.ToString();
         }
         //Base math function
         void DecimalNumberValue::Add(std::string number){WholeNumber.Add(number);}
