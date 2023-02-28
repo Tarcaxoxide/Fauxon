@@ -1,9 +1,14 @@
 #include<DataTypes/DecimalNumberValue.hpp>
 
-
+extern bool IsDigit(char Char);
 namespace Fauxon{
     namespace DataTypes{
         //constructors!, constructors!, constructors!, construct!
+        DecimalNumberValue::DecimalNumberValue():WholeNumber("0"),DecimalNumber("0"){
+            DecimalPlaces=6;
+            DecimalNumber.MinimalDigits=DecimalPlaces;
+            while(DecimalNumber.Number.size()<DecimalPlaces)DecimalNumber.Number+="0";
+        }
         DecimalNumberValue::DecimalNumberValue(long double number):WholeNumber("0"),DecimalNumber("0"){
             std::string Xnumber = std::to_string(number);
             std::stringstream input_stringstream(Xnumber);
@@ -17,12 +22,16 @@ namespace Fauxon{
             WholeNumber=parts[0];
             DecimalNumber=parts[1];
             DecimalPlaces=DecimalNumber.Number.size()>=6?DecimalNumber.Number.size():6;
+            DecimalNumber.MinimalDigits=DecimalPlaces;
+            while(DecimalNumber.Number.size()<DecimalPlaces)DecimalNumber.Number+="0";
             DecimalNumber.Sign=WholeNumber.Sign;
             DecimalNumber.oSign=WholeNumber.oSign;
         }
         DecimalNumberValue::DecimalNumberValue(std::string number):WholeNumber("0"),DecimalNumber("0"){
             WholeNumber=number;
             DecimalPlaces=DecimalNumber.Number.size()>=6?DecimalNumber.Number.size():6;
+            DecimalNumber.MinimalDigits=DecimalPlaces;
+            while(DecimalNumber.Number.size()<DecimalPlaces)DecimalNumber.Number+="0";
             DecimalNumber.Sign=WholeNumber.Sign;
             DecimalNumber.oSign=WholeNumber.oSign;
         }
@@ -30,6 +39,8 @@ namespace Fauxon{
             WholeNumber=wholeNumber;
             DecimalNumber=decimalNumber;
             DecimalPlaces=DecimalNumber.Number.size()>=6?DecimalNumber.Number.size():6;
+            DecimalNumber.MinimalDigits=DecimalPlaces;
+            while(DecimalNumber.Number.size()<DecimalPlaces)DecimalNumber.Number+="0";
             DecimalNumber.Sign=WholeNumber.Sign;
             DecimalNumber.oSign=WholeNumber.oSign;
         }
@@ -43,6 +54,8 @@ namespace Fauxon{
         DecimalNumberValue::DecimalNumberValue(const WholeNumberValue& number):WholeNumber("0"),DecimalNumber("0"){
             WholeNumber=number;
             DecimalPlaces=DecimalNumber.Number.size()>=6?DecimalNumber.Number.size():6;
+            DecimalNumber.MinimalDigits=DecimalPlaces;
+            while(DecimalNumber.Number.size()<DecimalPlaces)DecimalNumber.Number+="0";
             DecimalNumber.Sign=WholeNumber.Sign;
             DecimalNumber.oSign=WholeNumber.oSign;
         }
@@ -50,13 +63,14 @@ namespace Fauxon{
             WholeNumber=wholeNumber;
             DecimalNumber=decimalNumber;
             DecimalPlaces=DecimalNumber.Number.size()>=6?DecimalNumber.Number.size():6;
+            DecimalNumber.MinimalDigits=DecimalPlaces;
+            while(DecimalNumber.Number.size()<DecimalPlaces)DecimalNumber.Number+="0";
             DecimalNumber.Sign=WholeNumber.Sign;
             DecimalNumber.oSign=WholeNumber.oSign;
         }
         //To string for printing the number out (shshsh... it's already a string XD)
-        std::string DecimalNumberValue::ToString(){
-            if(DecimalNumber!=0)return WholeNumber.ToString()+std::string(".")+DecimalNumber.Number;
-            return WholeNumber.ToString();
+        std::string DecimalNumberValue::ToString()const{
+            return WholeNumber.ToString()+std::string(".")+DecimalNumber.Number;
         }
         //Base math function
         void DecimalNumberValue::Add(std::string number){WholeNumber.Add(number);}
@@ -198,6 +212,39 @@ namespace Fauxon{
             WholeNumber=parts[0];
             DecimalNumber=parts[1];
             return *this;
+        }
+        //Parse
+        bool DecimalNumberValue::TryParse(std::string number,DecimalNumberValue& out){
+            int dot_count=0;
+            bool Minus=false;
+            for(size_t i=0;i<number.size();i++){
+                if(!IsDigit(number[i])){
+                    switch(number[i]){
+                        case '.':{
+                            dot_count++;
+                        }continue;
+                        case '+':{
+                            if(i!=0)return false;
+                        }continue;
+                        case '-':{
+                            if(i!=0)return false;
+                        }continue;
+                        default:break;
+                    }
+                    return false;
+                }
+            }
+            if(dot_count>1)return false;
+            std::stringstream input_stringstream(number);
+            std::deque<std::string> parts;
+            std::string parsed;
+            while (std::getline(input_stringstream,parsed,'.')){
+                parts.push_back(parsed);
+            }
+            if(parts.size() == 0)parts.push_back("0");
+            if(parts.size() == 1)parts.push_back("0");
+            out = DecimalNumberValue(parts[0],parts[1]);
+            return true;
         }
     };
 };

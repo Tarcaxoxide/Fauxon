@@ -13,19 +13,20 @@ namespace Fauxon{
             uint8_t Sign='+';
             uint8_t oSign='-';
             std::string Number;
+            size_t MinimalDigits=1;
             //constructors!, constructors!, constructors!, construct!
             WholeNumberValue(int64_t number);
             WholeNumberValue(std::string number);
             WholeNumberValue(const WholeNumberValue& number);
             //To string for printing the number out (shshsh... it's already a string XD)
-            std::string ToString();
+            std::string ToString()const;
             //Base math function
             void Add(std::string number);inline void Add(WholeNumberValue number){Add(number.Number);}
             void Subtract(std::string number);inline void Subtract(WholeNumberValue number){Subtract(number.ToString());}
             void Multiply(std::string number);inline void Multiply(WholeNumberValue number){Multiply(number.ToString());}
             void Divide(std::string number);inline void Divide(WholeNumberValue number){Divide(number.ToString());}
             void FlipSign();
-            void Shrink();
+            void Adjust();
             //Comparision operators
             bool operator<(std::string number);
             inline bool operator<(WholeNumberValue number){return (*this)<number.ToString();}
@@ -61,6 +62,8 @@ namespace Fauxon{
             WholeNumberValue& operator=(std::string number);
             inline WholeNumberValue& operator=(WholeNumberValue number){return (*this)=number.ToString();}
             inline WholeNumberValue& operator=(int64_t number){return (*this)=std::to_string(number);}
+            //Parse
+            static bool TryParse(std::string number,WholeNumberValue& out);
         };
     };
 };

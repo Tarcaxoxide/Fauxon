@@ -5,8 +5,8 @@
 #include<deque>
 namespace Fauxon{
     namespace Lexer{
-        void Lexer(std::string srcCode);
-        DataTypes::Token NextToken();
+        void Lex(std::string srcCode);
+        DataTypes::Token* NextToken();
     };
 };
 #endif

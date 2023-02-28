@@ -1,5 +1,6 @@
 #include<DataTypes/WholeNumberValue.hpp>
 
+extern bool IsDigit(char Char);
 namespace Fauxon{
     namespace DataTypes{
         //constructors!, constructors!, constructors!, construct!
@@ -14,7 +15,7 @@ namespace Fauxon{
             Add(number);
         }
         //To string for printing the number out (shshsh... it's already a string XD)
-        std::string WholeNumberValue::ToString(){
+        std::string WholeNumberValue::ToString()const{
             std::string Result="";
             Result+=Sign;
             Result+=Number;
@@ -64,7 +65,7 @@ namespace Fauxon{
             }
             std::reverse(tmp.begin(),tmp.end());
             Number=tmp;
-            Shrink();
+            Adjust();
         }
         void WholeNumberValue::Subtract(std::string number){
             switch(Sign){
@@ -114,7 +115,7 @@ namespace Fauxon{
                 std::reverse(tmp.begin(),tmp.end());
             }
             Number=tmp;
-            Shrink();
+            Adjust();
         }
         void WholeNumberValue::Divide(std::string number){
             WholeNumberValue Counter("0");
@@ -127,7 +128,7 @@ namespace Fauxon{
                 Result.Subtract(number);
             }
             Number=Counter.Number;
-            Shrink();
+            Adjust();
         }
         void WholeNumberValue::Multiply(std::string number){
             WholeNumberValue Counter(number);
@@ -136,13 +137,14 @@ namespace Fauxon{
                 Result.Add(Number);
             }
             Number=Result.Number;
-            Shrink();
+            Adjust();
         }
         void WholeNumberValue::FlipSign(){
             if(Sign == '-'){Sign='+';oSign='-';}else{Sign='-';oSign='+';}
         }
-        void WholeNumberValue::Shrink(){
-            while(Number[0] == '0'&&Number.size()>1)Number.erase(0,1);
+        void WholeNumberValue::Adjust(){
+            while(Number[0] == '0'&&Number.size()>MinimalDigits)Number.erase(0,1);
+            while(Number.size()<MinimalDigits)Number+="0";
         }
         //Comparision operators
         bool WholeNumberValue::operator<(std::string number){//205<300
@@ -268,5 +270,13 @@ namespace Fauxon{
         WholeNumberValue& WholeNumberValue::operator*=(std::string number){Multiply(number);return *this;}
         WholeNumberValue& WholeNumberValue::operator/=(std::string number){Divide(number);return *this;}
         WholeNumberValue& WholeNumberValue::operator=(std::string number){Number.clear();Add(number);return *this;}
+        //Parse
+        bool WholeNumberValue::TryParse(std::string number,WholeNumberValue& out){
+            for(size_t i=0;i<number.size();i++){
+                if(!IsDigit(number[i]))return false;
+            }
+            out = WholeNumberValue(number);
+            return true;
+        }
     };
 };
