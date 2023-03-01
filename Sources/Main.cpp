@@ -3,8 +3,8 @@
 #include<fstream>
 #include<DataTypes/Token.hpp>
 #include<Lexer.hpp>
+#include<DataTypes/DiByte.hpp>
 int main(int c,char** v){
-    
     if(c == 2){
         std::ifstream file(v[1]);
         for(std::string Line;std::getline(file,Line);){

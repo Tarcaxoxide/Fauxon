@@ -7,6 +7,7 @@
 #include<algorithm>
 #include<iostream>
 #include<sstream>
+#include<DataTypes/DiByte.hpp>
 namespace Fauxon{
     namespace DataTypes{
         struct WholeNumberValue{

@@ -12,7 +12,7 @@ Build/%.o:Sources/%.cpp
 Build/exe:$(OBJS)
 	$(CC) $(C_FLAGS) -o $@ $^
 
-.PHONY: compile clean run
+.PHONY: compile clean run push
 
 compile: Build/exe
 
