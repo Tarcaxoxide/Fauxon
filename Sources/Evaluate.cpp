@@ -126,15 +126,22 @@ void Evalutate(const std::shared_ptr<Node::BlockNode>& block){
 						leftSide=SegmentEnviroment->Get(Node::as_value(leftSide));
 					}
 					Eval_Equation(SegmentEnviroment,leftSide);
-					if(rightSide->type()==Node::Type_en::value&&rightSide->str() == "!"){
+					if(rightSide->type()==Node::Type_en::value&&rightSide->str() == "@"){
+						std::cout<<SegmentEnviroment->local_stack.back()->expose().Value<<std::endl;
+						SegmentEnviroment->local_stack.pop_back();
+						break;
+					}
+					else if(rightSide->type()==Node::Type_en::value&&rightSide->str() == "!"){
 						InstructionPointer=0;
 						SegmentId = std::stoll(SegmentEnviroment->local_stack.back()->expose().Value);
 						SegmentEnviroment->local_stack.pop_back();
 						break;
-					}else if(rightSide->type()==Node::Type_en::value&&rightSide->str() == "..."){
+					}
+					else if(rightSide->type()==Node::Type_en::value&&rightSide->str() == "..."){
 						SegmentEnviroment->local_stack.push_back(SegmentEnviroment->local_stack.back());
 						break;
-					}else if(rightSide->type()==Node::Type_en::value&&rightSide->str() == ".."){
+					}
+					else if(rightSide->type()==Node::Type_en::value&&rightSide->str() == ".."){
 						global_stack.push_back(SegmentEnviroment->local_stack.back());
 						break;
 					}
