@@ -12,17 +12,20 @@ Build/%.o:Sources/%.cpp
 Build/exe:$(OBJS)
 	$(CC) $(C_FLAGS) -o $@ $^
 
-.PHONY: compile clean run push
+.PHONY: compile clean push run run_test_counter
 
 compile: Build/exe
 
 clean:
 	@rm -frv Build/*
 
-run: Build/exe
-	./$<
-
 push: clean compile
 	git add .
 	git commit -am "$(shell date)" 
 	git push "https://loganer%40vivaldi.net:$(shell cat ../git_token.txt)@github.com/Tarcaxoxide/Fauxon.git"
+
+run: Build/exe
+	./$<
+
+run_test_counter: Build/exe
+	./$< Tests/counter.txt
