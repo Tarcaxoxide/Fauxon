@@ -42,6 +42,11 @@ struct Enviroment{
 		}
 		return std::make_shared<Node::ValueNode>(Token::Token{Token::Type_en::number,"0"});
 	}
+	void Nuke(){
+		local_stack.clear();
+		VariableNames.clear();
+		VariableValues.clear();
+	}
 };
 
 void Eval_Equation(Enviroment*& SegmentEnviroment,std::shared_ptr<Node::Node>& currentInstruction){
@@ -102,8 +107,8 @@ void Eval_Equation(Enviroment*& SegmentEnviroment,std::shared_ptr<Node::Node>& c
 }
 
 void Evalutate(const std::shared_ptr<Node::BlockNode>& block){
+	Enviroment* SegmentEnviroment = new Enviroment;
 	for(size_t SegmentId=0;SegmentId<block->size();SegmentId++){
-		Enviroment* SegmentEnviroment = new Enviroment;
 		for(size_t InstructionPointer=0;InstructionPointer<block->peek(SegmentId)->size();InstructionPointer++){
 			std::shared_ptr<Node::Node> currentInstruction = block->peek(SegmentId)->peek(InstructionPointer);
 			switch(currentInstruction->type()){
@@ -152,7 +157,7 @@ void Evalutate(const std::shared_ptr<Node::BlockNode>& block){
 				default:break;
 			}
 		}
-		delete SegmentEnviroment;
+		SegmentEnviroment->Nuke();
 	}
 }
 //{0=..}{..=a+1=..}{..=a?<10 -1=!}
