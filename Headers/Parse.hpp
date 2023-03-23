@@ -4,11 +4,13 @@
 #include <Tokenize.hpp>
 #include <memory>
 #include <cassert>
+#include <PixelStructure.hpp>
 
 
 namespace Node{
 	enum Type_en{
 		value,
+		pixel,
 		comarison,
 		assignment,
 		equation,
@@ -26,15 +28,29 @@ namespace Node{
 			virtual Type_en type();
 			virtual std::string str();
 			inline Token::Token expose(){return m_value;}
-		private:
+		protected:
 			Token::Token m_value;
+	};
+	class PixelNode:public ValueNode{
+		public:
+			PixelNode(PixelStructure pixel):m_pixel(pixel),ValueNode(Token::Token{Token::Type_en::pixel,""}){
+				m_value.Value=str();
+			}
+			PixelNode(uint64_t pixel):m_pixel(*(PixelStructure*)&pixel),ValueNode(Token::Token{Token::Type_en::pixel,""}){
+				m_value.Value=str();
+			}
+			virtual Type_en type();
+			virtual std::string str();
+			inline PixelStructure expose(){return m_pixel;}
+		protected:
+			PixelStructure m_pixel;
 	};
 	class ComarisonNode:public Node{
 		public:
 			ComarisonNode(std::shared_ptr<Node> leftSide,Token::Token operater,std::shared_ptr<ValueNode> rightSide):m_leftSide(leftSide),m_operater(operater),m_rightSide(rightSide){}
 			virtual Type_en type();
 			virtual std::string str();
-		private:
+		protected:
 			std::shared_ptr<Node> m_leftSide;
 			Token::Token m_operater;
 			std::shared_ptr<ValueNode> m_rightSide;
@@ -46,7 +62,7 @@ namespace Node{
 			virtual std::string str();
 			struct e{std::shared_ptr<Node> left;Token::Token operater;std::shared_ptr<Node> right;}; 
 			e expose(){return{m_leftSide,m_operater,m_rightSide};}
-		private:
+		protected:
 			std::shared_ptr<Node> m_leftSide;
 			Token::Token m_operater;
 			std::shared_ptr<ValueNode> m_rightSide;
@@ -59,7 +75,7 @@ namespace Node{
 			std::deque<std::shared_ptr<Node>> Flatten();
 			struct e{std::shared_ptr<Node> left;Token::Token operater;std::shared_ptr<Node> right;}; 
 			e expose(){return{m_leftSide,m_operater,m_rightSide};}
-		private:
+		protected:
 			std::shared_ptr<Node> m_leftSide;
 			Token::Token m_operater;
 			std::shared_ptr<Node> m_rightSide;
@@ -77,7 +93,7 @@ namespace Node{
 			inline std::shared_ptr<Node> front(){return peek(0);}
 			inline size_t size(){return m_body.size();}
 			inline std::shared_ptr<Node> back(){return peek(size()-1);}
-		private:
+		protected:
 			std::deque<std::shared_ptr<Node>> m_body;
 	};
 	class BlockNode:public Node{
@@ -93,7 +109,7 @@ namespace Node{
 			inline std::shared_ptr<SegmentNode> front(){return peek(0);}
 			inline size_t size(){return m_body.size();}
 			inline std::shared_ptr<SegmentNode> back(){return peek(size()-1);}
-		private:
+		protected:
 			std::deque<std::shared_ptr<SegmentNode>> m_body;
 	};
 
@@ -104,6 +120,8 @@ namespace Node{
 	inline std::shared_ptr<Node> as_generic(std::shared_ptr<EquationNode> that){return std::static_pointer_cast<Node>(that);}
 	inline std::shared_ptr<Node> as_generic(std::shared_ptr<SegmentNode> that){return std::static_pointer_cast<Node>(that);}
 	inline std::shared_ptr<ValueNode> as_value(std::shared_ptr<Node> that){return std::static_pointer_cast<ValueNode>(that);}
+	inline std::shared_ptr<ValueNode> as_value(std::shared_ptr<PixelNode> that){return std::static_pointer_cast<ValueNode>(that);}
+	inline std::shared_ptr<PixelNode> as_pixel(std::shared_ptr<ValueNode> that){return std::static_pointer_cast<PixelNode>(that);}
 	inline std::shared_ptr<ComarisonNode> as_comarison(std::shared_ptr<Node> that){return std::static_pointer_cast<ComarisonNode>(that);}
 	inline std::shared_ptr<AssignmentNode> as_assignment(std::shared_ptr<Node> that){return std::static_pointer_cast<AssignmentNode>(that);}
 	inline std::shared_ptr<EquationNode> as_equation(std::shared_ptr<Node> that){return std::static_pointer_cast<EquationNode>(that);}

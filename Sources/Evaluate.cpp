@@ -1,6 +1,7 @@
 #include <Evaluate.hpp>
 #include <iostream>
 #include <deque>
+#include <string>
 
 std::deque<std::shared_ptr<Node::ValueNode>> global_stack;
 
@@ -132,7 +133,7 @@ void Evalutate(const std::shared_ptr<Node::BlockNode>& block){
 					}
 					Eval_Equation(SegmentEnviroment,leftSide);
 					if(rightSide->type()==Node::Type_en::value&&rightSide->str() == "@"){
-						std::cout<<SegmentEnviroment->local_stack.back()->expose().Value<<std::endl;
+						std::cout<<SegmentEnviroment->local_stack.back()->str()<<std::endl;
 						SegmentEnviroment->local_stack.pop_back();
 						break;
 					}
@@ -150,6 +151,16 @@ void Evalutate(const std::shared_ptr<Node::BlockNode>& block){
 						global_stack.push_back(SegmentEnviroment->local_stack.back());
 						break;
 					}
+					else if(rightSide->type()==Node::Type_en::value&&rightSide->str() == "#"){
+						//std::stoll(Node::as_value(left)->expose().Value
+						int64_t raw = std::stoll(SegmentEnviroment->local_stack.back()->expose().Value);
+						uint64_t Xraw = *(uint64_t*)&raw;
+						SegmentEnviroment->local_stack.pop_back();
+						SegmentEnviroment->local_stack.push_back(std::make_shared<Node::PixelNode>(Xraw));
+						std::cout<<"\t?"<<Xraw<<std::endl;
+						std::cout<<"\t?"<<SegmentEnviroment->local_stack.back()->str()<<std::endl;
+						break;
+					}
 					SegmentEnviroment->Set(Node::as_value(SegmentEnviroment->local_stack.back()),Node::as_value(rightSide));
 				}break;
 				//segment
@@ -160,4 +171,3 @@ void Evalutate(const std::shared_ptr<Node::BlockNode>& block){
 		SegmentEnviroment->Nuke();
 	}
 }
-//{0=..}{..=a+1=..}{..=a?<10 -1=!}

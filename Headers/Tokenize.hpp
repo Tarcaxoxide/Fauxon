@@ -13,7 +13,8 @@ namespace Token{
 		brace,
 		assignment,
 		equation,
-		comparison
+		comparison,
+		pixel
 	};
 	struct Token{
 		Type_en Type;
@@ -32,6 +33,7 @@ namespace Token{
 			case Type_en::assignment:{Result+="<assignment: ";}break;
 			case Type_en::equation:{Result+="<equation: ";}break;
 			case Type_en::comparison:{Result+="<comparison: ";}break;
+			case Type_en::pixel:{Result+="<pixel: ";}break;
 		}
 		Result+=t.Value;
 		Result+=">";

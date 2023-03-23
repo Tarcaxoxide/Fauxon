@@ -47,14 +47,7 @@ std::deque<Token::Token> Tokenize(const std::string& src){
 				}
 				Result.push_back({Token::equation,src.substr(Index,1)});
 			}break;
-			case '!':{
-				if(DefaultBuffer.size()){
-					Result.push_back({Token::Type_en::identifier,DefaultBuffer});
-					DefaultBuffer="";
-				}
-				Result.push_back({Token::identifier,src.substr(Index,1)});
-			}break;
-			case '@':{
+			case '#':case '@':case '!':{
 				if(DefaultBuffer.size()){
 					Result.push_back({Token::Type_en::identifier,DefaultBuffer});
 					DefaultBuffer="";

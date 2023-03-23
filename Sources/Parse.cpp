@@ -69,6 +69,7 @@ std::shared_ptr<Node::BlockNode> Parse_Block(const std::deque<Token::Token>& tok
 
 namespace Node{
 	Type_en ValueNode::type(){return Type_en::value;}
+	Type_en PixelNode::type(){return Type_en::pixel;}
 	Type_en ComarisonNode::type(){return Type_en::comarison;}
 	Type_en AssignmentNode::type(){return Type_en::assignment;}
 	Type_en EquationNode::type(){return Type_en::equation;}
@@ -76,6 +77,9 @@ namespace Node{
 	Type_en BlockNode::type(){return Type_en::block;}
 	std::string ValueNode::str(){
 		return m_value.Value;
+	}
+	std::string PixelNode::str(){
+		return m_pixel.str();
 	}
 	std::string ComarisonNode::str(){
 		return m_leftSide->str()+std::string(" ")+m_operater.Value+std::string(" ")+m_rightSide->str();
