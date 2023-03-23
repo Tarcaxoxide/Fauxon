@@ -78,8 +78,27 @@ namespace Node{
 	std::string ValueNode::str(){
 		return m_value.Value;
 	}
+
+/*
+uint8_t Color_Red;
+uint8_t Color_Green;
+uint8_t Color_Blue;
+uint8_t Color_Alpha;
+uint8_t Position_X;
+uint8_t Position_Y;
+uint8_t Position_Z;
+uint8_t Position_Scalar;
+*/
+
 	std::string PixelNode::str(){
-		return std::string("{")+std::to_string(m_pixel.Position_Scalar)+std::string(":")+std::to_string(m_pixel.Position_X)+std::string(":")+std::to_string(m_pixel.Position_Y)+std::string(":")+std::to_string(m_pixel.Position_Z)+std::string(",")+std::to_string(m_pixel.Color_Red)+std::string(":")+std::to_string(m_pixel.Color_Green)+std::string(":")+std::to_string(m_pixel.Color_Blue)+std::string(":")+std::to_string(m_pixel.Color_Alpha)+std::string("}");
+		return std::string("{")+std::string("Red ")+std::to_string(m_pixel.Color_Red)+std::string(":")+\
+								std::string("Green ")+std::to_string(m_pixel.Color_Green)+std::string(":")+\
+								std::string("Blue ")+std::to_string(m_pixel.Color_Blue)+std::string(":")+\
+								std::string("Alpha ")+std::to_string(m_pixel.Color_Alpha)+std::string(",")+\
+								std::string("X ")+std::to_string(m_pixel.Position_X)+std::string(":")+\
+								std::string("Y ")+std::to_string(m_pixel.Position_Y)+std::string(":")+\
+								std::string("Z ")+std::to_string(m_pixel.Position_Z)+std::string(":")+\
+								std::string("Scalar ")+std::to_string(m_pixel.Position_Scalar)+std::string("}");
 	}
 	std::string ComarisonNode::str(){
 		return m_leftSide->str()+std::string(" ")+m_operater.Value+std::string(" ")+m_rightSide->str();
