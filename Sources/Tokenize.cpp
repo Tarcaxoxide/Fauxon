@@ -87,7 +87,12 @@ std::deque<Token::Token> Tokenize(const std::string& src){
 					DefaultBuffer="";
 				}
 				std::string result = (UntilNotMatch(src,Index,{'0','1','2','3','4','5','6','7','8','9','.'},false));
-				Result.push_back({Token::Type_en::number,result});
+				size_t dot_count=0;
+				for(size_t i=0;i<result.size();i++)if(result[i]=='.')dot_count++;
+
+				if(dot_count<3)Result.push_back({Token::Type_en::number,result});
+				else if(dot_count==7)Result.push_back({Token::Type_en::pixel,result});
+				else Result.push_back({Token::Type_en::nil,result});
 				Index--;
 			}break;
 			case '"':{

@@ -32,15 +32,16 @@ namespace Node{
 	};
 	class PixelNode:public ValueNode{
 		public:
+			//A.B.C.D.E.F.G.H
 			struct PixelStructure{
-				uint8_t Color_Red;
-				uint8_t Color_Green;
-				uint8_t Color_Blue;
-				uint8_t Color_Alpha;
-				uint8_t Position_X;
-				uint8_t Position_Y;
-				uint8_t Position_Z;
-				uint8_t Position_Scalar;
+				uint8_t Color_Red;			//A
+				uint8_t Color_Green;		//B
+				uint8_t Color_Blue;			//C
+				uint8_t Color_Alpha;		//D
+				uint8_t Position_X;			//E
+				uint8_t Position_Y;			//F
+				uint8_t Position_Z;			//G
+				uint8_t Position_Scalar;	//H
 			}__attribute__((packed));
 			PixelNode(PixelStructure pixel):m_pixel(pixel),ValueNode(Token::Token{Token::Type_en::pixel,""}){
 				m_value.Value=str();
