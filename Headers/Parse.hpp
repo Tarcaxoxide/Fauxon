@@ -4,7 +4,6 @@
 #include <Tokenize.hpp>
 #include <memory>
 #include <cassert>
-#include <PixelStructure.hpp>
 
 
 namespace Node{
@@ -33,6 +32,16 @@ namespace Node{
 	};
 	class PixelNode:public ValueNode{
 		public:
+			struct PixelStructure{
+				uint8_t Position_Scalar;
+				uint8_t Position_X;
+				uint8_t Position_Y;
+				uint8_t Position_Z;
+				uint8_t Color_Red;
+				uint8_t Color_Green;
+				uint8_t Color_Blue;
+				uint8_t Color_Alpha; 
+			};
 			PixelNode(PixelStructure pixel):m_pixel(pixel),ValueNode(Token::Token{Token::Type_en::pixel,""}){
 				m_value.Value=str();
 			}
@@ -41,6 +50,7 @@ namespace Node{
 			}
 			virtual Type_en type();
 			virtual std::string str();
+			
 			inline PixelStructure expose(){return m_pixel;}
 		protected:
 			PixelStructure m_pixel;

@@ -79,7 +79,7 @@ namespace Node{
 		return m_value.Value;
 	}
 	std::string PixelNode::str(){
-		return m_pixel.str();
+		return std::string("{")+std::to_string(m_pixel.Position_Scalar)+std::string(":")+std::to_string(m_pixel.Position_X)+std::string(":")+std::to_string(m_pixel.Position_Y)+std::string(":")+std::to_string(m_pixel.Position_Z)+std::string(",")+std::to_string(m_pixel.Color_Red)+std::string(":")+std::to_string(m_pixel.Color_Green)+std::string(":")+std::to_string(m_pixel.Color_Blue)+std::string(":")+std::to_string(m_pixel.Color_Alpha)+std::string("}");
 	}
 	std::string ComarisonNode::str(){
 		return m_leftSide->str()+std::string(" ")+m_operater.Value+std::string(" ")+m_rightSide->str();
