@@ -12,7 +12,7 @@ Build/%.o:Sources/%.cpp
 Build/exe:$(OBJS)
 	$(CC) $(C_FLAGS) -o $@ $^
 
-.PHONY: compile clean push run run_test_counter run_test_counter_pixels
+.PHONY: compile clean push run
 
 compile: Build/exe
 
@@ -26,9 +26,3 @@ push: clean compile
 
 run: Build/exe
 	./$<
-
-run_test_counter: Build/exe
-	./$< Tests/counter.txt
-
-run_test_counter_pixels: Build/exe
-	./$< Tests/counter_pixels.txt
