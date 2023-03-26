@@ -17,6 +17,42 @@ namespace Common{
 						line.push_back(Buffer);
 						ia++;ib++;
 					}break;
+					case '[':{
+						std::deque<std::string> Buffer;
+						while(ia<input.size()&&ib<input[ia].size()&&input[ia][ib][0] != ']'){
+							Buffer.push_back(input[ia][ib]);
+							if(++ib>input[ia].size()){ib=0;ia++;}
+						}
+						if(ia<input.size()){Buffer.push_back(input[ia][ib]);}
+						line.push_back(Buffer);
+					}break;
+					case '(':{
+						std::deque<std::string> Buffer;
+						while(ia<input.size()&&ib<input[ia].size()&&input[ia][ib][0] != ')'){
+							Buffer.push_back(input[ia][ib]);
+							if(++ib>input[ia].size()){ib=0;ia++;}
+						}
+						if(ia<input.size()){Buffer.push_back(input[ia][ib]);}
+						line.push_back(Buffer);
+					}break;
+					case '{':{
+						std::deque<std::string> Buffer;
+						while(ia<input.size()&&ib<input[ia].size()&&input[ia][ib][0] != '}'){
+							Buffer.push_back(input[ia][ib]);
+							if(++ib>input[ia].size()){ib=0;ia++;}
+						}
+						if(ia<input.size()){Buffer.push_back(input[ia][ib]);}
+						line.push_back(Buffer);
+					}break;
+					case '<':{
+						std::deque<std::string> Buffer;
+						while(ia<input.size()&&ib<input[ia].size()&&input[ia][ib][0] != '>'){
+							Buffer.push_back(input[ia][ib]);
+							if(++ib>input[ia].size()){ib=0;ia++;}
+						}
+						if(ia<input.size()){Buffer.push_back(input[ia][ib]);}
+						line.push_back(Buffer);
+					}break;
 					default:{
 						std::deque<std::string> Buffer;
 						Buffer.push_back(input[ia][ib]);
