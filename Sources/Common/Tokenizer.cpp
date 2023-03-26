@@ -11,31 +11,34 @@ namespace Common{
 				}break;
 				case '\'':{
 					if(buffer.length()){token.push_back(buffer);tokens.push_back(token);token.clear();buffer="";}
-					token.push_back(input.substr(i,1));
-					while(++i<input.size()&&(input[i]!='\''||input[i-1]=='\\')){token.push_back(input.substr(i,1));}
-					token.push_back(input.substr(i,1));
+					std::string Buffer=input.substr(i,1);
+					while(++i<input.size()&&(input[i]!='\''||input[i-1]=='\\')){Buffer+=input.substr(i,1);}
+					Buffer+=input.substr(i,1);
+					token.push_back(Buffer);
 					tokens.push_back(token);
 					token.clear();
 				}break;
 				case '"':{
 					if(buffer.length()){token.push_back(buffer);tokens.push_back(token);token.clear();buffer="";}
-					token.push_back(input.substr(i,1));
-					while(++i<input.size()&&(input[i]!='"'||input[i-1]=='\\')){token.push_back(input.substr(i,1));}
-					token.push_back(input.substr(i,1));
+					std::string Buffer=input.substr(i,1);
+					while(++i<input.size()&&(input[i]!='"'||input[i-1]=='\\')){Buffer+=input.substr(i,1);}
+					Buffer+=input.substr(i,1);
+					token.push_back(Buffer);
 					tokens.push_back(token);
 					token.clear();
 				}break;
 				case '`':{
 					if(buffer.length()){token.push_back(buffer);tokens.push_back(token);token.clear();buffer="";}
-					token.push_back(input.substr(i,1));
-					while(++i<input.size()&&(input[i]!='`'||input[i-1]=='\\')){token.push_back(input.substr(i,1));}
-					token.push_back(input.substr(i,1));
+					std::string Buffer=input.substr(i,1);
+					while(++i<input.size()&&(input[i]!='`'||input[i-1]=='\\')){Buffer+=input.substr(i,1);}
+					Buffer+=input.substr(i,1);
+					token.push_back(Buffer);
 					tokens.push_back(token);
 					token.clear();
 				}break;
 				case '0':case '1':case '2':case '3':case '4':case '5':case '6':case '7':case '8':case '9':case '.':{
 					if(buffer.length()){token.push_back(buffer);tokens.push_back(token);token.clear();buffer="";}
-					std::string numberBuffer=input.substr(i,1);
+					std::string Buffer=input.substr(i,1);
 					while(++i<input.size()&&(input[i]=='0'
 										   ||input[i]=='1'
 										   ||input[i]=='2'
@@ -47,8 +50,8 @@ namespace Common{
 										   ||input[i]=='8'
 										   ||input[i]=='9'
 										   ||input[i]=='0'
-										   ||input[i]=='.')){numberBuffer+=input.substr(i,1);}
-					token.push_back(numberBuffer);
+										   ||input[i]=='.')){Buffer+=input.substr(i,1);}
+					token.push_back(Buffer);
 					tokens.push_back(token);
 					token.clear();i--;
 				}break;
