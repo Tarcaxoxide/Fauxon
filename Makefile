@@ -1,4 +1,4 @@
-C_FLAGS=-IHeaders -Ofast $(CFLAGS)
+C_FLAGS=$(CFLAGS) -IHeaders -O0 -g --static
 CC = clang++
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 SRC = $(call rwildcard,Sources,*.cpp)

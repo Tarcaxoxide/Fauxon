@@ -7,8 +7,3 @@ int main(){
 		std::cout<<Interpreter::Interpreter(Line)<<std::endl;
 	}
 }
-
-/*
-(pizza)"is"<awesome>{lol}[123]'7'
-
-*/
