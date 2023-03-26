@@ -61,8 +61,30 @@ namespace Common{
 					tokens.push_back(token);
 					token.clear();
 				}break;
-				case '<':case '>':case '(':case ')':case '{':case '}':case '[':case ']':{
-					if(buffer.length()){token.push_back(buffer);tokens.push_back(token);token.clear();buffer="";}
+				case '<':{
+					token.push_back(input.substr(i,1));
+					while(++i<input.size()&&(input[i]!='>')){token.push_back(input.substr(i,1));}
+					token.push_back(input.substr(i,1));
+					tokens.push_back(token);
+					token.clear();
+				}break;
+				case '(':{
+					token.push_back(input.substr(i,1));
+					while(++i<input.size()&&(input[i]!=')')){token.push_back(input.substr(i,1));}
+					token.push_back(input.substr(i,1));
+					tokens.push_back(token);
+					token.clear();
+				}break;
+				case '{':{
+					token.push_back(input.substr(i,1));
+					while(++i<input.size()&&(input[i]!='}')){token.push_back(input.substr(i,1));}
+					token.push_back(input.substr(i,1));
+					tokens.push_back(token);
+					token.clear();
+				}break;
+				case '[':{
+					token.push_back(input.substr(i,1));
+					while(++i<input.size()&&(input[i]!=']')){token.push_back(input.substr(i,1));}
 					token.push_back(input.substr(i,1));
 					tokens.push_back(token);
 					token.clear();
