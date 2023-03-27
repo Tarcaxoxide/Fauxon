@@ -237,7 +237,20 @@ std::deque<std::string> Calculate_ListOnList(const std::deque<std::string>& A,co
 }
 std::deque<std::string> Calculate_ListOnSingle(const std::deque<std::string>& A,const std::deque<std::string>& B,const char op){
 	std::deque<std::string> Result;
-	assert(false);//unimplemented
+	switch(op){
+		case '+':{
+			Result.push_back(std::to_string(std::stoll(A[1])+std::stoll(B[0])));
+		}break;
+		case '-':{
+			Result.push_back(std::to_string(std::stoll(A[1])-std::stoll(B[0])));
+		}break;
+		case '*':{
+			Result.push_back(std::to_string(std::stoll(A[1])*std::stoll(B[0])));
+		}break;
+		case '/':{
+			Result.push_back(std::to_string(std::stoll(A[1])/std::stoll(B[0])));
+		}break;
+	}
 	return Result;
 }
 std::deque<std::string> Calculate_SingleOnList(const std::deque<std::string>& A,const std::deque<std::string>& B,const char op){
