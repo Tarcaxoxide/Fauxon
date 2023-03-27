@@ -149,51 +149,66 @@ std::deque<std::string> Calculate_ArrayOnSingle(const std::deque<std::string>& A
 }
 std::deque<std::string> Calculate_ListOnArray(const std::deque<std::string>& A,const std::deque<std::string>& B,const char op){
 	std::deque<std::string> Result;
-	Result.push_back("[");
 	switch(op){
 		case '+':{
-			for(size_t iA=0;iA<A.size();iA++){
-				for(size_t iB=0;iB<B.size();iB++){
-					if(A[iA][0]=='<'||A[iA][0]=='>')continue;
-					if(B[iB][0]=='['||B[iB][0]==']')continue;
-					Result.push_back(std::to_string(std::stoll(A[iA])+std::stoll(B[iB])));
+			for(size_t iA=1;iA<A.size()-1;iA++){
+				for(size_t iB=1;iB<B.size()-1;iB++){
+					if(iB-1){
+						std::string SubResult = std::to_string(((std::stoll(Result[iA-1])+std::stoll(A[iA])))+std::stoll(B[iB]));
+						Result.erase(Result.begin()+(iA-1));
+						Result.insert(Result.begin()+(iA-1),SubResult);
+					}else{
+						Result.push_back(std::to_string(std::stoll(A[iA])+std::stoll(B[iB])));
+					}
 				}
 			}
 		}break;
 		case '-':{
-			for(size_t iA=0;iA<A.size();iA++){
-				for(size_t iB=0;iB<B.size();iB++){
-					if(A[iA][0]=='<'||A[iA][0]=='>')continue;
-					if(B[iB][0]=='['||B[iB][0]==']')continue;
-					Result.push_back(std::to_string(std::stoll(A[iA])-std::stoll(B[iB])));
+			for(size_t iA=1;iA<A.size()-1;iA++){
+				for(size_t iB=1;iB<B.size()-1;iB++){
+					if(iB-1){
+						std::string SubResult = std::to_string(((std::stoll(Result[iA-1])+std::stoll(A[iA])))-std::stoll(B[iB]));
+						Result.erase(Result.begin()+(iA-1));
+						Result.insert(Result.begin()+(iA-1),SubResult);
+					}else{
+						Result.push_back(std::to_string(std::stoll(A[iA])-std::stoll(B[iB])));
+					}
 				}
 			}
 		}break;
 		case '*':{
-			for(size_t iA=0;iA<A.size();iA++){
-				for(size_t iB=0;iB<B.size();iB++){
-					if(A[iA][0]=='<'||A[iA][0]=='>')continue;
-					if(B[iB][0]=='['||B[iB][0]==']')continue;
-					Result.push_back(std::to_string(std::stoll(A[iA])*std::stoll(B[iB])));
+			for(size_t iA=1;iA<A.size()-1;iA++){
+				for(size_t iB=1;iB<B.size()-1;iB++){
+					if(iB-1){
+						std::string SubResult = std::to_string(((std::stoll(Result[iA-1])+std::stoll(A[iA])))*std::stoll(B[iB]));
+						Result.erase(Result.begin()+(iA-1));
+						Result.insert(Result.begin()+(iA-1),SubResult);
+					}else{
+						Result.push_back(std::to_string(std::stoll(A[iA])*std::stoll(B[iB])));
+					}
 				}
 			}
 		}break;
 		case '/':{
-			for(size_t iA=0;iA<A.size();iA++){
-				for(size_t iB=0;iB<B.size();iB++){
-					if(A[iA][0]=='<'||A[iA][0]=='>')continue;
-					if(B[iB][0]=='['||B[iB][0]==']')continue;
-					Result.push_back(std::to_string(std::stoll(A[iA])/std::stoll(B[iB])));
+			for(size_t iA=1;iA<A.size()-1;iA++){
+				for(size_t iB=1;iB<B.size()-1;iB++){
+					if(iB-1){
+						std::string SubResult = std::to_string(((std::stoll(Result[iA-1])+std::stoll(A[iA])))/std::stoll(B[iB]));
+						Result.erase(Result.begin()+(iA-1));
+						Result.insert(Result.begin()+(iA-1),SubResult);
+					}else{
+						Result.push_back(std::to_string(std::stoll(A[iA])/std::stoll(B[iB])));
+					}
 				}
 			}
 		}break;
 	}
+	Result.push_front("[");
 	Result.push_back("]");
 	return Result;
 }
 std::deque<std::string> Calculate_ListOnList(const std::deque<std::string>& A,const std::deque<std::string>& B,const char op){
 	std::deque<std::string> Result;
-	
 	switch(op){
 		case '+':{
 			for(size_t iA=1;iA<A.size()-1;iA++){
