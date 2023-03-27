@@ -10,7 +10,7 @@ namespace Interpreter{
 		std::string Result="";
 		for(auto token:parsed){
 			for(auto part:token){
-				Result+=part;
+				Result+=part+" ";
 			}
 			Result+="\n";
 		}

@@ -1,4 +1,10 @@
 #include<Common/Parser.hpp>
+
+
+
+#include<iostream>
+
+
 namespace Common{	
 	std::deque<std::deque<std::string>> Parser(std::deque<std::deque<std::string>> input){
 		std::deque<std::deque<std::string>> line;
@@ -17,49 +23,57 @@ namespace Common{
 						Buffer.push_back(operatorBuffer);
 						Buffer.push_back(rightBuffer);
 						line.push_back(Buffer);
-						if(ia<input.size()-1&&ib<input[ia].size()){ia++;ib++;}
+						if(ia<input.size()-1&&ib<input[ia].size()){ib++;}
 					}break;
 					case '[':{
 						std::deque<std::string> Buffer;
-						while(ia<input.size()&&ib<input[ia].size()&&input[ia][ib][0] != ']'){
-							Buffer.push_back(input[ia][ib++]);
-							if(ib>input[ia].size()){ib=0;ia++;}
-						}
-						Buffer.push_back(input[ia][ib]);
+						do{
+							do{
+								Buffer.push_back(input[ia][ib++]);
+							}while(ib<input[ia].size());
+							ib=0;
+							ia++;
+						}while(ia<input.size()&&input[ia][ib][0]!=']');
+						Buffer.push_back(input[ia][ib++]);
 						line.push_back(Buffer);
 					}break;
 					case '(':{
 						std::deque<std::string> Buffer;
-						while(ia<input.size()&&ib<input[ia].size()&&input[ia][ib][0] != ')'){
-							Buffer.push_back(input[ia][ib++]);
-							if(ib>input[ia].size()){ib=0;ia++;}
-						}
-						Buffer.push_back(input[ia][ib]);
+						do{
+							do{
+								Buffer.push_back(input[ia][ib++]);
+							}while(ib<input[ia].size());
+							ib=0;
+							ia++;
+						}while(ia<input.size()&&input[ia][ib][0]!=')');
+						Buffer.push_back(input[ia][ib++]);
 						line.push_back(Buffer);
 					}break;
 					case '{':{
 						std::deque<std::string> Buffer;
-						while(ia<input.size()&&ib<input[ia].size()&&input[ia][ib][0] != '}'){
-							Buffer.push_back(input[ia][ib++]);
-							if(ib>input[ia].size()){ib=0;ia++;}
-						}
-						Buffer.push_back(input[ia][ib]);
+						do{
+							do{
+								Buffer.push_back(input[ia][ib++]);
+							}while(ib<input[ia].size());
+							ib=0;
+							ia++;
+						}while(ia<input.size()&&input[ia][ib][0]!='}');
+						Buffer.push_back(input[ia][ib++]);
 						line.push_back(Buffer);
 					}break;
 					case '<':{
 						std::deque<std::string> Buffer;
-						while(ia<input.size()&&ib<input[ia].size()&&input[ia][ib][0] != '>'){
-							Buffer.push_back(input[ia][ib++]);
-							if(ib>input[ia].size()){ib=0;ia++;}
-						}
-						Buffer.push_back(input[ia][ib]);
+						do{
+							do{
+								Buffer.push_back(input[ia][ib++]);
+							}while(ib<input[ia].size());
+							ib=0;
+							ia++;
+						}while(ia<input.size()&&input[ia][ib][0]!='>');
+						Buffer.push_back(input[ia][ib++]);
 						line.push_back(Buffer);
 					}break;
-					default:{
-						//std::deque<std::string> Buffer;
-						//Buffer.push_back(input[ia][ib]);
-						//line.push_back(Buffer);
-					}break;
+					default:{}break;
 				}
 			}
 		}
