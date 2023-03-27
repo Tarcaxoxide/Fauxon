@@ -72,12 +72,80 @@ std::deque<std::string> Calculate_ArrayOnArray(const std::deque<std::string>& A,
 }
 std::deque<std::string> Calculate_ArrayOnList(const std::deque<std::string>& A,const std::deque<std::string>& B,const char op){
 	std::deque<std::string> Result;
-	assert(false);//unimplemented
+	Result.push_back("<");
+	switch(op){
+		case '+':{
+			for(size_t i=0;(i<A.size()||i<B.size());i++){
+				if(A[i][0]=='['||A[i][0]==']')continue;
+				if(B[i][0]=='('||B[i][0]==')')continue;
+				if(!(i<A.size())){
+					Result.push_back(B[i]);
+				}else if(!(i<B.size())){
+					Result.push_back(A[i]);
+				}else{
+					Result.push_back(std::to_string(std::stoll(A[i])+std::stoll(B[i])));
+				}
+			}
+		}break;
+		case '-':{
+			for(size_t i=0;(i<A.size()||i<B.size());i++){
+				if(A[i][0]=='['||A[i][0]==']')continue;
+				if(B[i][0]=='('||B[i][0]==')')continue;
+				if(!(i<A.size())){
+					Result.push_back(B[i]);
+				}else if(!(i<B.size())){
+					Result.push_back(A[i]);
+				}else{
+					Result.push_back(std::to_string(std::stoll(A[i])-std::stoll(B[i])));
+				}
+			}
+		}break;
+		case '*':{
+			for(size_t i=0;(i<A.size()||i<B.size());i++){
+				if(A[i][0]=='['||A[i][0]==']')continue;
+				if(B[i][0]=='('||B[i][0]==')')continue;
+				if(!(i<A.size())){
+					Result.push_back(B[i]);
+				}else if(!(i<B.size())){
+					Result.push_back(A[i]);
+				}else{
+					Result.push_back(std::to_string(std::stoll(A[i])*std::stoll(B[i])));
+				}
+			}
+		}break;
+		case '/':{
+			for(size_t i=0;(i<A.size()||i<B.size());i++){
+				if(A[i][0]=='['||A[i][0]==']')continue;
+				if(B[i][0]=='('||B[i][0]==')')continue;
+				if(!(i<A.size())){
+					Result.push_back(B[i]);
+				}else if(!(i<B.size())){
+					Result.push_back(A[i]);
+				}else{
+					Result.push_back(std::to_string(std::stoll(A[i])/std::stoll(B[i])));
+				}
+			}
+		}break;
+	}
+	Result.push_back(">");
 	return Result;
 }
 std::deque<std::string> Calculate_ArrayOnSingle(const std::deque<std::string>& A,const std::deque<std::string>& B,const char op){
 	std::deque<std::string> Result;
-	assert(false);//unimplemented
+	switch(op){
+		case '+':{
+			Result.push_back(std::to_string(std::stoll(A[1])+std::stoll(B[0])));
+		}break;
+		case '-':{
+			Result.push_back(std::to_string(std::stoll(A[1])-std::stoll(B[0])));
+		}break;
+		case '*':{
+			Result.push_back(std::to_string(std::stoll(A[1])*std::stoll(B[0])));
+		}break;
+		case '/':{
+			Result.push_back(std::to_string(std::stoll(A[1])/std::stoll(B[0])));
+		}break;
+	}
 	return Result;
 }
 
