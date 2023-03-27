@@ -76,7 +76,7 @@ std::deque<std::string> Calculate_ArrayOnList(const std::deque<std::string>& A,c
 		case '+':{
 			for(size_t i=0;(i<A.size()||i<B.size());i++){
 				if(A[i][0]=='['||A[i][0]==']')continue;
-				if(B[i][0]=='('||B[i][0]==')')continue;
+				if(B[i][0]=='<'||B[i][0]=='>')continue;
 				if(!(i<A.size())){
 					Result.push_back(B[i]);
 				}else if(!(i<B.size())){
@@ -89,7 +89,7 @@ std::deque<std::string> Calculate_ArrayOnList(const std::deque<std::string>& A,c
 		case '-':{
 			for(size_t i=0;(i<A.size()||i<B.size());i++){
 				if(A[i][0]=='['||A[i][0]==']')continue;
-				if(B[i][0]=='('||B[i][0]==')')continue;
+				if(B[i][0]=='<'||B[i][0]=='>')continue;
 				if(!(i<A.size())){
 					Result.push_back(B[i]);
 				}else if(!(i<B.size())){
@@ -102,7 +102,7 @@ std::deque<std::string> Calculate_ArrayOnList(const std::deque<std::string>& A,c
 		case '*':{
 			for(size_t i=0;(i<A.size()||i<B.size());i++){
 				if(A[i][0]=='['||A[i][0]==']')continue;
-				if(B[i][0]=='('||B[i][0]==')')continue;
+				if(B[i][0]=='<'||B[i][0]=='>')continue;
 				if(!(i<A.size())){
 					Result.push_back(B[i]);
 				}else if(!(i<B.size())){
@@ -115,7 +115,7 @@ std::deque<std::string> Calculate_ArrayOnList(const std::deque<std::string>& A,c
 		case '/':{
 			for(size_t i=0;(i<A.size()||i<B.size());i++){
 				if(A[i][0]=='['||A[i][0]==']')continue;
-				if(B[i][0]=='('||B[i][0]==')')continue;
+				if(B[i][0]=='<'||B[i][0]=='>')continue;
 				if(!(i<A.size())){
 					Result.push_back(B[i]);
 				}else if(!(i<B.size())){
@@ -149,12 +149,90 @@ std::deque<std::string> Calculate_ArrayOnSingle(const std::deque<std::string>& A
 }
 std::deque<std::string> Calculate_ListOnArray(const std::deque<std::string>& A,const std::deque<std::string>& B,const char op){
 	std::deque<std::string> Result;
-	assert(false);//unimplemented
+	Result.push_back("[");
+	switch(op){
+		case '+':{
+			for(size_t iA=0;iA<A.size();iA++){
+				for(size_t iB=0;iB<B.size();iB++){
+					if(A[iA][0]=='<'||A[iA][0]=='>')continue;
+					if(B[iB][0]=='['||B[iB][0]==']')continue;
+					Result.push_back(std::to_string(std::stoll(A[iA])+std::stoll(B[iB])));
+				}
+			}
+		}break;
+		case '-':{
+			for(size_t iA=0;iA<A.size();iA++){
+				for(size_t iB=0;iB<B.size();iB++){
+					if(A[iA][0]=='<'||A[iA][0]=='>')continue;
+					if(B[iB][0]=='['||B[iB][0]==']')continue;
+					Result.push_back(std::to_string(std::stoll(A[iA])-std::stoll(B[iB])));
+				}
+			}
+		}break;
+		case '*':{
+			for(size_t iA=0;iA<A.size();iA++){
+				for(size_t iB=0;iB<B.size();iB++){
+					if(A[iA][0]=='<'||A[iA][0]=='>')continue;
+					if(B[iB][0]=='['||B[iB][0]==']')continue;
+					Result.push_back(std::to_string(std::stoll(A[iA])*std::stoll(B[iB])));
+				}
+			}
+		}break;
+		case '/':{
+			for(size_t iA=0;iA<A.size();iA++){
+				for(size_t iB=0;iB<B.size();iB++){
+					if(A[iA][0]=='<'||A[iA][0]=='>')continue;
+					if(B[iB][0]=='['||B[iB][0]==']')continue;
+					Result.push_back(std::to_string(std::stoll(A[iA])/std::stoll(B[iB])));
+				}
+			}
+		}break;
+	}
+	Result.push_back("]");
 	return Result;
 }
 std::deque<std::string> Calculate_ListOnList(const std::deque<std::string>& A,const std::deque<std::string>& B,const char op){
 	std::deque<std::string> Result;
-	assert(false);//unimplemented
+	Result.push_back("<");
+	switch(op){
+		case '+':{
+			for(size_t iA=0;iA<A.size();iA++){
+				for(size_t iB=0;iB<B.size();iB++){
+					if(A[iA][0]=='<'||A[iA][0]=='>')continue;
+					if(B[iB][0]=='<'||B[iB][0]=='>')continue;
+					Result.push_back(std::to_string(std::stoll(A[iA])+std::stoll(B[iB])));
+				}
+			}
+		}break;
+		case '-':{
+			for(size_t iA=0;iA<A.size();iA++){
+				for(size_t iB=0;iB<B.size();iB++){
+					if(A[iA][0]=='<'||A[iA][0]=='>')continue;
+					if(B[iB][0]=='<'||B[iB][0]=='>')continue;
+					Result.push_back(std::to_string(std::stoll(A[iA])-std::stoll(B[iB])));
+				}
+			}
+		}break;
+		case '*':{
+			for(size_t iA=0;iA<A.size();iA++){
+				for(size_t iB=0;iB<B.size();iB++){
+					if(A[iA][0]=='<'||A[iA][0]=='>')continue;
+					if(B[iB][0]=='<'||B[iB][0]=='>')continue;
+					Result.push_back(std::to_string(std::stoll(A[iA])*std::stoll(B[iB])));
+				}
+			}
+		}break;
+		case '/':{
+			for(size_t iA=0;iA<A.size();iA++){
+				for(size_t iB=0;iB<B.size();iB++){
+					if(A[iA][0]=='<'||A[iA][0]=='>')continue;
+					if(B[iB][0]=='<'||B[iB][0]=='>')continue;
+					Result.push_back(std::to_string(std::stoll(A[iA])/std::stoll(B[iB])));
+				}
+			}
+		}break;
+	}
+	Result.push_back(">");
 	return Result;
 }
 std::deque<std::string> Calculate_ListOnSingle(const std::deque<std::string>& A,const std::deque<std::string>& B,const char op){
@@ -194,7 +272,7 @@ namespace Interpreter{
 					}
 					stack.clear();
 				}break;
-				case '+':{
+				case '+':case '-':case '*':case '/':{
 					assert(stack.size()>0);
 					std::deque<std::string> local_stack_B = stack.back();stack.pop_back();
 					assert(stack.size()>0);
@@ -203,31 +281,31 @@ namespace Interpreter{
 					switch(local_stack_A[0][0]){
 						case '<'/*list*/:{
 							switch(local_stack_B[0][0]){
-								case '<'/*list*/:{local_stack_Results = Calculate_ListOnList(local_stack_A,local_stack_B,'+');}break;
-								case '['/*array*/:{local_stack_Results = Calculate_ListOnArray(local_stack_A,local_stack_B,'+');}break;
+								case '<'/*list*/:{local_stack_Results = Calculate_ListOnList(local_stack_A,local_stack_B,token[0][0]);}break;
+								case '['/*array*/:{local_stack_Results = Calculate_ListOnArray(local_stack_A,local_stack_B,token[0][0]);}break;
 								case '{'/*body*/:{assert(false);/*you can't do math with this*/}break;
 								case '('/*argument list*/:{assert(false);/*you can't do math with this*/}break;
-								default/*single number, hopefully*/:{local_stack_Results = Calculate_ListOnSingle(local_stack_A,local_stack_B,'+');}break;
+								default/*single number, hopefully*/:{local_stack_Results = Calculate_ListOnSingle(local_stack_A,local_stack_B,token[0][0]);}break;
 							}
 						}break;
 						case '['/*array*/:{
 							switch(local_stack_B[0][0]){
-								case '<'/*list*/:{local_stack_Results = Calculate_ArrayOnList(local_stack_A,local_stack_B,'+');}break;
-								case '['/*array*/:{local_stack_Results = Calculate_ArrayOnArray(local_stack_A,local_stack_B,'+');}break;
+								case '<'/*list*/:{local_stack_Results = Calculate_ArrayOnList(local_stack_A,local_stack_B,token[0][0]);}break;
+								case '['/*array*/:{local_stack_Results = Calculate_ArrayOnArray(local_stack_A,local_stack_B,token[0][0]);}break;
 								case '{'/*body*/:{assert(false);/*you can't do math with this*/}break;
 								case '('/*argument list*/:{assert(false);/*you can't do math with this*/}break;
-								default/*single number, hopefully*/:{local_stack_Results = Calculate_ArrayOnSingle(local_stack_A,local_stack_B,'+');}break;
+								default/*single number, hopefully*/:{local_stack_Results = Calculate_ArrayOnSingle(local_stack_A,local_stack_B,token[0][0]);}break;
 							}
 						}break;
 						case '{'/*body*/:{assert(false);/*you can't do math with this*/}break;
 						case '('/*argument list*/:{assert(false);/*you can't do math with this*/}break;
 						default/*single number, hopefully*/:{
 							switch(local_stack_B[0][0]){
-								case '<'/*list*/:{local_stack_Results = Calculate_SingleOnList(local_stack_A,local_stack_B,'+');}break;
-								case '['/*array*/:{local_stack_Results = Calculate_SingleOnArray(local_stack_A,local_stack_B,'+');}break;
+								case '<'/*list*/:{local_stack_Results = Calculate_SingleOnList(local_stack_A,local_stack_B,token[0][0]);}break;
+								case '['/*array*/:{local_stack_Results = Calculate_SingleOnArray(local_stack_A,local_stack_B,token[0][0]);}break;
 								case '{'/*body*/:{assert(false);/*you can't do math with this*/}break;
 								case '('/*argument list*/:{assert(false);/*you can't do math with this*/}break;
-								default/*single number, hopefully*/:{local_stack_Results = Calculate_SingleOnSingle(local_stack_A,local_stack_B,'+');}break;
+								default/*single number, hopefully*/:{local_stack_Results = Calculate_SingleOnSingle(local_stack_A,local_stack_B,token[0][0]);}break;
 							}
 						}break;
 					}
