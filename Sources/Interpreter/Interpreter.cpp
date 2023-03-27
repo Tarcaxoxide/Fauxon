@@ -9,7 +9,6 @@
 
 std::deque<std::deque<std::string>> stack;
 
-
 std::deque<std::string> Calculate_ArrayOnArray(const std::deque<std::string>& A,const std::deque<std::string>& B,const char op){
 	std::deque<std::string> Result;
 	Result.push_back("[");
@@ -148,7 +147,6 @@ std::deque<std::string> Calculate_ArrayOnSingle(const std::deque<std::string>& A
 	}
 	return Result;
 }
-
 std::deque<std::string> Calculate_ListOnArray(const std::deque<std::string>& A,const std::deque<std::string>& B,const char op){
 	std::deque<std::string> Result;
 	assert(false);//unimplemented
@@ -164,7 +162,6 @@ std::deque<std::string> Calculate_ListOnSingle(const std::deque<std::string>& A,
 	assert(false);//unimplemented
 	return Result;
 }
-
 std::deque<std::string> Calculate_SingleOnList(const std::deque<std::string>& A,const std::deque<std::string>& B,const char op){
 	std::deque<std::string> Result;
 	assert(false);//unimplemented
@@ -180,7 +177,6 @@ std::deque<std::string> Calculate_SingleOnSingle(const std::deque<std::string>& 
 	assert(false);//unimplemented
 	return Result;
 }
-
 
 namespace Interpreter{
 	std::string Interpreter(std::string input){
