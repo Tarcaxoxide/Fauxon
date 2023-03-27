@@ -36,7 +36,7 @@ namespace Common{
 					tokens.push_back(token);
 					token.clear();
 				}break;
-				case '0':case '1':case '2':case '3':case '4':case '5':case '6':case '7':case '8':case '9':case '.':{
+				case '0':case '1':case '2':case '3':case '4':case '5':case '6':case '7':case '8':case '9':{
 					if(buffer.length()){token.push_back(buffer);tokens.push_back(token);token.clear();buffer="";}
 					std::string Buffer=input.substr(i,1);
 					while(++i<input.size()&&(input[i]=='0'
@@ -48,9 +48,7 @@ namespace Common{
 										   ||input[i]=='6'
 										   ||input[i]=='7'
 										   ||input[i]=='8'
-										   ||input[i]=='9'
-										   ||input[i]=='0'
-										   ||input[i]=='.')){Buffer+=input.substr(i,1);}
+										   ||input[i]=='9')){Buffer+=input.substr(i,1);}
 					token.push_back(Buffer);
 					tokens.push_back(token);
 					token.clear();i--;
