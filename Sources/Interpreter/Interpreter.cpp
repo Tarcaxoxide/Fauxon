@@ -375,7 +375,6 @@ std::deque<std::string> Calculate_SingleOnSingle(const std::deque<std::string>& 
 	}
 	return Result;
 }
-
 namespace Interpreter{
 	std::string Interpreter(std::string input){
 		std::deque<std::deque<std::string>> tokens = Common::Tokenizer(input);
@@ -436,7 +435,6 @@ namespace Interpreter{
 				}break;
 			}
 		}
-
 		//Result.erase(Result.length()-1,1);
 		return Result;
 	}
