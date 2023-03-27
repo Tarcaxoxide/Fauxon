@@ -1,10 +1,5 @@
 #include<Common/Parser.hpp>
 
-
-
-#include<iostream>
-
-
 namespace Common{	
 	std::deque<std::deque<std::string>> Parser(std::deque<std::deque<std::string>> input){
 		std::deque<std::deque<std::string>> line;
